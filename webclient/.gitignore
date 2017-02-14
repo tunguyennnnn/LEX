@@ -1,0 +1,14 @@
+lex.js
+
+node_modules
+*.map
+npm-debug.log
+
+# tern server
+.tern-project
+.tern-port
+
+#OS junk files
+[Tt]humbs.db
+*.DS_Store
+.DS_Store
