@@ -2,7 +2,6 @@
   "name": "lex-webclient",
   "version": "0.0.1",
   "description": "Lex web client interface",
-  "main": "index.js",
   "scripts": {
     "style": "standard 'app/**/*.js'",
     "dev": "node webpack.server.js",
@@ -14,6 +13,7 @@
   },
   "author": "LEX",
   "license": "UNLICENSED",
+  "private": true,
   "devDependencies": {
     "ava": "^0.18.1",
     "babel": "^6.5.2",
