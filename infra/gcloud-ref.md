@@ -1,15 +1,15 @@
 	gcloud beta container \
 	 --project "<our-PROJECT-ID>" \
 	 clusters create "lex-cluster" \
-	 --zone "us-east1-f" \
+	 --zone "us-east1-b" \
 	 --machine-type "n1-standard-1" \
 	 --num-nodes "2" \
 	 --network "default"
 
 	gcloud compute disks create \
 	 --project "<our-PROJECT-ID>" \
-	 --zone "us-east1-f" \
-	 --size 200GB \
+	 --zone "us-east1-b" \
+	 --size 100GB \
 	 mongo-disk
 
 	gcloud compute forwarding-rules list
