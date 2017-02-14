@@ -33,6 +33,7 @@ spec:
       labels:
         app: webclient
         tier: frontend
+        type: deployment
     spec:
       containers:
         - name: nginx

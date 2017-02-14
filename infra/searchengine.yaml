@@ -11,8 +11,8 @@ spec:
       targetPort: http
       protocol: TCP
 ---
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
   name: searchengine
 spec:
@@ -22,7 +22,7 @@ spec:
       labels:
         name: searchengine
         tier: backend
-        type: controller
+        type: deployment
     spec:
       containers:
       - name: searchengine

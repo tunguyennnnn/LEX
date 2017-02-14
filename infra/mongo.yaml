@@ -11,8 +11,8 @@ spec:
   selector:
     name: mongo
 ---
-apiVersion: v1
-kind: ReplicationController
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
   labels:
     name: mongo
@@ -23,10 +23,12 @@ spec:
     metadata:
       labels:
         name: mongo
+        tier: backend
+        type: deployment
     spec:
       containers:
-      - image: mongo
-        name: mongo
+      - name: mongo
+        image: mongo
         ports:
         - name: mongo
           containerPort: 27017
