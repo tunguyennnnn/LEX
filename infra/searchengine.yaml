@@ -27,6 +27,9 @@ spec:
       containers:
       - name: searchengine
         image: gcr.io/<OUR-PROJECT-ID>/app
+        env:
+        - name: PORT
+          value: "3000"
         ports:
         - name: http
           containerPort: 3000
