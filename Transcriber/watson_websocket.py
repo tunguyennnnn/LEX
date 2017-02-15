@@ -1,7 +1,7 @@
 import json                        # json
 import threading                   # multi threading
 import os                          # for listing directories
-import Queue                       # queue used for thread syncronization
+import queue                       # queue used for thread syncronization
 import sys                         # system calls
 import argparse                    # for parsing arguments
 import base64                      # necessary to encode in base64
@@ -24,11 +24,11 @@ class Utils:
               + serviceName + "/api"
         uri = uri.replace("wss://", "https://")
         uri = uri.replace("ws://", "https://")
-        print uri
+        print(uri)
         resp = requests.get(uri, auth=(username, password), verify=False,
                             headers={'Accept': 'application/json'},
                             timeout=(30, 30))
-        print resp.text
+        print(resp.text)
         jsonObject = resp.json()
         return jsonObject['token']
 
@@ -44,7 +44,7 @@ class WSInterfaceFactory(WebSocketClientFactory):
         self.dirOutput = dirOutput
         self.contentType = contentType
         self.model = model
-        self.queueProto = Queue.Queue()
+        self.queueProto = queue.Queue()
 
         self.openHandshakeTimeout = 10
         self.closeHandshakeTimeout = 10
@@ -61,14 +61,14 @@ class WSInterfaceFactory(WebSocketClientFactory):
             utt = self.queue.get_nowait()
             self.queueProto.put(utt)
             return True
-        except Queue.Empty:
-            print "getUtterance: no more utterances to process, queue is empty!"
+        except queue.Empty:
+            print("getUtterance: no more utterances to process, queue is empty!")
             return False
 
     def endReactor(self):
 
         self.queue.join()
-        print "about to stop the reactor!"
+        print("about to stop the reactor!")
         reactor.stop()
 
     # this function gets called every time connectWS is called (once
@@ -81,7 +81,7 @@ class WSInterfaceFactory(WebSocketClientFactory):
                                         self.dirOutput, self.contentType)
             proto.setUtterance(utt)
             return proto
-        except Queue.Empty:
+        except queue.Empty:
             print ("queue should not be empty, otherwise this function "
                    "should not have been called")
             return None
@@ -105,9 +105,9 @@ class WSInterfaceProtocol(WebSocketClientProtocol):
         self.bytesSent = 0
         self.chunkSize = 2000     # in bytes
         super(self.__class__, self).__init__()
-        print dirOutput
-        print "contentType: " + str(self.contentType) + " queueSize: " + \
-            str(self.queue.qsize())
+        print(dirOutput)
+        print("contentType: " + str(self.contentType) + " queueSize: " + \
+            str(self.queue.qsize()))
 
     def setUtterance(self, utt):
 
@@ -141,35 +141,35 @@ class WSInterfaceProtocol(WebSocketClientProtocol):
         return
 
     def onConnect(self, response):
-        print "onConnect, server connected: {0}".format(response.peer)
+        print("onConnect, server connected: {0}".format(response.peer))
 
     def onOpen(self):
-        print "onOpen"
+        print("onOpen")
         data = {"action": "start", "content-type": str(self.contentType),
                 "continuous": True, "interim_results": True,
                 "inactivity_timeout": 600}
         data['word_confidence'] = True
         data['timestamps'] = True
         data['max_alternatives'] = 3
-        print "sendMessage(init)"
+        print("sendMessage(init)")
         # send the initialization parameters
         self.sendMessage(json.dumps(data).encode('utf8'))
 
         # start sending audio right away (it will get buffered in the
         # STT service)
-        print self.uttFilename
+        print(self.uttFilename)
         f = open(str(self.uttFilename), 'rb')
         self.bytesSent = 0
         dataFile = f.read()
         self.maybeSendChunk(dataFile)
-        print "onOpen ends"
+        print("onOpen ends")
 
     def onMessage(self, payload, isBinary):
 
         if isBinary:
-            print("Binary message received: {0} bytes".format(len(payload)))
+            print(("Binary message received: {0} bytes".format(len(payload))))
         else:
-            print(u"Text message received: {0}".format(payload.decode('utf8')))
+            print(("Text message received: {0}".format(payload.decode('utf8'))))
 
             # if uninitialized, receive the initialization response
             # from the server
@@ -177,7 +177,7 @@ class WSInterfaceProtocol(WebSocketClientProtocol):
             if 'state' in jsonObject:
                 self.listeningMessages += 1
                 if (self.listeningMessages == 2):
-                    print "sending close 1000"
+                    print("sending close 1000")
                     # close the connection
                     self.sendClose(1000)
 
@@ -187,7 +187,7 @@ class WSInterfaceProtocol(WebSocketClientProtocol):
                 hypothesis = ""
                 # empty hypothesis
                 if (len(jsonObject['results']) == 0):
-                    print "empty hypothesis!"
+                    print("empty hypothesis!")
                 # regular hypothesis
                 else:
                     # dump the message to the output directory
@@ -200,16 +200,16 @@ class WSInterfaceProtocol(WebSocketClientProtocol):
                     hypothesis = res['alternatives'][0]['transcript']
                     bFinal = (res['final'] == True)
                     if bFinal:
-                        print "final hypothesis: \"" + hypothesis + "\""
+                        print("final hypothesis: \"" + hypothesis + "\"")
                         self.summary[self.uttNumber]['hypothesis'] += hypothesis
                     else:
-                        print "interim hyp: \"" + hypothesis + "\""
+                        print("interim hyp: \"" + hypothesis + "\"")
 
     def onClose(self, wasClean, code, reason):
 
         print("onClose")
-        print("WebSocket connection closed: {0}".format(reason), "code: ",
-              code, "clean: ", wasClean, "reason: ", reason)
+        print(("WebSocket connection closed: {0}".format(reason), "code: ",
+              code, "clean: ", wasClean, "reason: ", reason))
         self.summary[self.uttNumber]['status']['code'] = code
         self.summary[self.uttNumber]['status']['reason'] = reason
 
@@ -285,7 +285,7 @@ if __name__ == '__main__':
     # create output directory if necessary
     if (os.path.isdir(args.dirOutput)):
         while True:
-            answer = raw_input(
+            answer = input(
                 "the output directory \"" +
                 args.dirOutput + "\" already exists, overwrite? (y/n)? ")
             if (answer == "n"):
@@ -300,11 +300,11 @@ if __name__ == '__main__':
     log.startLogging(sys.stdout)
 
     # add audio files to the processing queue
-    q = Queue.Queue()
+    q = queue.Queue()
     lines = [line.rstrip('\n') for line in open(args.fileInput)]
     fileNumber = 0
     for fileName in(lines):
-        print fileName
+        print(fileName)
         q.put((fileNumber, fileName))
         fileNumber += 1
 
@@ -323,7 +323,7 @@ if __name__ == '__main__':
         string = args.credentials[0] + ":" + args.credentials[1]
         headers["Authorization"] = "Basic " + base64.b64encode(string)
 
-    print headers
+    print(headers)
     # create a WS server factory with our protocol
     url = "wss://" + hostname + "/speech-to-text/api/v1/recognize?model=" \
             + args.model
@@ -353,18 +353,18 @@ if __name__ == '__main__':
     emptyHypotheses = 0
     for key, value in (sorted(summary.items())):
         if value['status']['code'] == 1000:
-            print (key, ": ", value['status']['code'], " ",
-                   value['hypothesis'].encode('utf-8'))
+            print((key, ": ", value['status']['code'], " ",
+                   value['hypothesis'].encode('utf-8')))
             successful += 1
             if value['hypothesis'][0] == "":
                 emptyHypotheses += 1
         else:
-            print (str(key) + ": ", value['status']['code'], " REASON: ",
-                   value['status']['reason'])
+            print((str(key) + ": ", value['status']['code'], " REASON: ",
+                   value['status']['reason']))
         f.write(str(counter) + ": " +
                 value['hypothesis'].encode('utf-8') + "\n")
         counter += 1
     f.close()
-    print ("successful sessions: ", successful, " (",
+    print(("successful sessions: ", successful, " (",
            len(summary) - successful, " errors) (" +
-           str(emptyHypotheses) + " empty hypotheses)")
+           str(emptyHypotheses) + " empty hypotheses)"))

@@ -35,7 +35,7 @@ class TextProcessing:
 			data = '[' + text_time_file.read() + ']'
 			data = json.loads(data.replace('}{', '},{'))
 			self.text_with_time = [twt for twt in data 
-											if twt["results"][0]["alternatives"][0].has_key("word_confidence")]
+											if "word_confidence" in twt["results"][0]["alternatives"][0]]
 			self.reduced_twt = [] 
 			for twt in self.text_with_time:
 				self.reduced_twt += self.extract_word_object(twt)
@@ -54,7 +54,7 @@ class TextProcessing:
 			lemma_word = lemma.lemmatize(word_obj["word"])
 			self.wordnet.setdefault(lemma_word, 0)
 			self.wordnet[lemma_word] += 1
-		print self.wordnet
+		print(self.wordnet)
 
 
 
