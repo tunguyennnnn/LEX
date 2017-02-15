@@ -18,13 +18,13 @@ const VideoInfoSchema = new mongoose.Schema({
 })
 
 /**
- * Methods
+ * Methods : defined on the document (instance)
  */
-VideoInfoSchema.method({
-})
+// VideoInfoSchema.methods.foo
+// VideoInfoSchema.methods.bar
 
 /**
- * Statics
+ * Statics : methods defined on the Model
  */
 VideoInfoSchema.statics = {
   /**
