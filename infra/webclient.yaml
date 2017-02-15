@@ -4,8 +4,8 @@ metadata:
   name: nginx-config
 data:
   nginx-upstreams: |
-    upstream searchengine {
-        server searchengine;
+    upstream apigateway {
+        server apigateway;
     }
 ---
 apiVersion: v1
