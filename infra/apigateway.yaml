@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: apigateway
+spec:
+  selector:
+    name: apigateway
+    tier: backend
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: apigateway
+spec:
+  replicas: 3 # number of instances
+  template:
+    metadata:
+      labels:
+        name: apigateway
+        tier: backend
+        type: deployment
+    spec:
+      containers:
+      - name: apigateway
+        image: gcr.io/<OUR-PROJECT-ID>/app
+        env:
+        - name: PORT
+          value: "4000"
+        - name: NODE_ENV
+          value: "production"
+        ports:
+        - name: http
+          containerPort: 4000

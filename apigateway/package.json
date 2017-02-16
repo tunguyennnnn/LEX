@@ -1,0 +1,31 @@
+{
+  "name": "lex-apigateway",
+  "version": "0.0.1",
+  "description": "Lex api gateway",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "node app/index.js"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.7",
+    "body-parser": "^1.16.1",
+    "compression": "^1.6.2",
+    "debug": "^2.6.1",
+    "express": "^4.14.1",
+    "express-jwt": "^5.1.0",
+    "express-winston": "^2.2.0",
+    "helmet": "^3.4.0",
+    "http-status": "^1.0.1",
+    "jsonwebtoken": "^7.3.0",
+    "lodash": "^4.17.4",
+    "method-override": "^2.3.7",
+    "mongoose": "^4.8.2",
+    "morgan": "^1.8.1",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "ava": "^0.18.1",
+    "standard": "^8.6.0"
+  }
+}

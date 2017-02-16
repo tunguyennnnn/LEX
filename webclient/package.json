@@ -1,0 +1,54 @@
+{
+  "name": "lex-webclient",
+  "version": "0.0.1",
+  "description": "Lex web client interface",
+  "scripts": {
+    "style": "standard 'app/**/*.js'",
+    "dev": "node webpack.server.js",
+    "build": "webpack -p --colors --progress --config=webpack.config.js",
+    "doc": "jsdoc -c jsdoc.conf -d ./doc app/index.js",
+    "test": "ava \"app/**/*.test.js\" --verbose --timeout=15s",
+    "watch:test": "npm run test -- --watch",
+    "cover:test": "nyc npm run test"
+  },
+  "author": "LEX",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "ava": "^0.18.1",
+    "babel": "^6.5.2",
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-plugin-transform-exponentiation-operator": "^6.22.0",
+    "babel-preset-env": "^1.1.8",
+    "babili": "0.0.10",
+    "css-loader": "^0.26.1",
+    "html-webpack-plugin": "^2.28.0",
+    "nyc": "^10.0.0",
+    "standard": "^8.6.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "rxjs": "^5.0.3"
+  },
+  "ava": {
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
+  },
+  "nyc": {
+    "reporter": [
+      "html",
+      "text"
+    ]
+  },
+  "standard": {
+    "ignore": [
+      "/dist/lex.js"
+    ]
+  }
+}

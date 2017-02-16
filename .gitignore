@@ -1,0 +1,29 @@
+# OSX junk files
+[Tt]humbs.db
+*.DS_Store
+
+# Tern server
+.tern-project
+.tern-port
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Output of 'npm pack'
+*.tgz
+
+# dotenv environment variables file
+.env
+
+# Python Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python virtualenv
+.venv
+venv/
