@@ -2,7 +2,6 @@ import os
 import sys
 from youtube_dl import YoutubeDL
 
-
 def download_video(video):
     def test_hook(d):
         if d['status'] == 'finished':
@@ -16,7 +15,7 @@ def download_video(video):
             'preferredcodec': 'opus',
         }],
         'progress_hooks': [test_hook],
-        # 'writeinfojson': 'true',
+		'outtmpl': os.path.join('recordings','%(id)s.%(ext)s')
     }
 
     downloader = YoutubeDL(options)
