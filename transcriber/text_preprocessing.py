@@ -4,10 +4,15 @@ from nltk.stem import WordNetLemmatizer
 from pymongo import MongoClient
 import os
 import json
+from contractions import contractions as Cont
+import re
 
 
-client = MongoClient('localhost', 27017)
-lemma = WordNetLemmatizer()
+
+Client = MongoClient('localhost', 27017)
+Lemma = WordNetLemmatizer()
+Pos_tag = nltk.pos_tag
+
 
 class TextProcessing:
 	'''
@@ -40,6 +45,31 @@ class TextProcessing:
 			for twt in self.text_with_time:
 				self.reduced_twt += self.extract_word_object(twt)
 
+	def eliminate_contraction(self):
+		'''
+			does: transform contraction to full words ex: there's -> there is
+		'''
+		global Cont
+		global Pos_tag
+		global Lemma
+		self.modified_transcript = ""
+		reg = re.compile("\s+|\.") #splitted by space and dot
+		keys = Cont.keys() 
+		for word in reg.split(self.full_transcript):
+			if word != "" and word != "\n":
+				if word in keys:
+					print Cont[word]
+					word = Cont[word][0]
+					print word
+				else:
+					tag = Pos_tag([word])[0][1]
+					pos_type = "n"
+					if tag == "VBR": #is a verb
+						pos_type ="v"
+					word = Lemma.lemmatize(word, pos=pos_type)
+				self.modified_transcript += (" " + word)
+
+
 	def extract_word_object(self, word_with_time):
 		return [{"word": word_info[0], 
 				 "time": {"start_time": float(word_info[1]), 
@@ -47,18 +77,42 @@ class TextProcessing:
 						 }
 				} for word_info in word_with_time["results"][0]["alternatives"][0]["timestamps"]]
 
-	def wordnet_processing(self):
-		global lemma
-		self.wordnet = {}
-		for word_obj in self.reduced_twt:
-			lemma_word = lemma.lemmatize(word_obj["word"])
-			self.wordnet.setdefault(lemma_word, 0)
-			self.wordnet[lemma_word] += 1
-		print(self.wordnet)
+	def compress_twt(self):
+		global Pos_tag
+		global Cont
+		self.compressed_twt = []
+		compressed_twt = {}
+		for twt in self.reduced_twt:
+			word = twt["word"]
+			time = twt["time"]
+			contraction_keys = Cont.keys()
+			if word in contraction_keys:
+				new_words = Cont[word][0].split(" ")
+				for new_word in new_words:
+					compressed_twt.setdefault(new_word, [])
+					compressed_twt[new_word].append(time)
+			else:
+				tag = Pos_tag([word])[0][1] #-> Pos_tag(["geese"]) -> [("geese", "NN")]
+				pos_type = "n" #default lemmatize to a nounce
+				if tag == "VBR": #is a verb
+					pos_type ="v"
+				new_word = Lemma.lemmatize(word, pos=pos_type)
+				compressed_twt.setdefault(new_word,[])
+				compressed_twt[new_word].append(time)
+		for key in compressed_twt.keys():
+			self.compressed_twt.append({"word": key, "time": compressed_twt[key]})
 
+	def construct_basic_data(self):
+		return {"words_with_time": self.compressed_twt, 
+				"raw_transcript": self.full_transcript, 
+				"processed_transcript": self.modified_transcript}
 
 
 # x = TextProcessing(1)
 # x.read_f_transcript('./output/hypotheses.txt')
 # x.read_f_text_time('./output/0.json.txt')
-# x.wordnet_processing()
+# x.eliminate_contraction()
+# x.compress_twt()
+# data = x.construct_basic_data()
+# f = open("a.txt", "w")
+# f.write(json.dumps(data))
