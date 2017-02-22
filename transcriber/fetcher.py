@@ -9,13 +9,14 @@ def download_video(video):
     # end test_hook
 
     options = {
+		'verbose': True,
         'format': 'bestaudio/best',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'opus',
         }],
         'progress_hooks': [test_hook],
-		'outtmpl': os.path.join('recordings','%(id)s.%(ext)s')
+		'outtmpl': os.path.join(os.getcwd(),'recordings','%(id)s.%(ext)s')
     }
 
     downloader = YoutubeDL(options)

@@ -1,3 +1,3 @@
-python -m nltk.downloader wordnet
-python -m nltk.downloader stopwords
-python -m nltk.downloader averaged_perceptron_tagger
+python3 -m nltk.downloader wordnet
+python3 -m nltk.downloader stopwords
+python3 -m nltk.downloader averaged_perceptron_tagger
