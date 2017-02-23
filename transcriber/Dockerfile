@@ -16,4 +16,4 @@ RUN sh nltk_download_packages.sh
 COPY . /usr/src/app
 
 # Run the Python command
-CMD [ "python3", "fetcher.py", "https://www.youtube.com/watch?v=dQw4w9WgXcQ" ]
+CMD [ "python3", "fetcher.py", "dQw4w9WgXcQ" ]
