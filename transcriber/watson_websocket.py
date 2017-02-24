@@ -264,7 +264,7 @@ if __name__ == '__main__':
         '-out', action='store', dest='dirOutput', default='./output',
         help='output directory')
     parser.add_argument(
-        '-type', action='store', dest='contentType', default='audio/wav',
+        '-type', action='store', dest='contentType', default='audio/ogg;codecs=opus',
         help='audio content type, for example: \'audio/l16; rate=44100\'')
     parser.add_argument(
         '-model', action='store', dest='model', default='en-US_BroadbandModel',

@@ -9,7 +9,9 @@ import re
 
 
 
-Client = MongoClient('localhost', 27017)
+Client = MongoClient(os.environ.get("REMOTE_MONGO"))
+VideosTextDb = Client.videostext
+VideoInfoCollection = VideosTextDb.text_with_time
 Lemma = WordNetLemmatizer()
 Pos_tag = nltk.pos_tag
 
@@ -24,7 +26,7 @@ class TextProcessing:
 			- lemmatize words
 	'''
 	def __init__(self, video_id, text_with_time = {}, full_transcript = "", db_name = 'videostext', collection='text_with_time'):
-		self.video_id = id
+		self.video_id = video_id
 		self.db_name = db_name
 		self.collection = collection
 		self.text_with_time = text_with_time  #format follows what Watson returns
@@ -39,9 +41,9 @@ class TextProcessing:
 		with open(file_path) as text_time_file:
 			data = '[' + text_time_file.read() + ']'
 			data = json.loads(data.replace('}{', '},{'))
-			self.text_with_time = [twt for twt in data 
+			self.text_with_time = [twt for twt in data
 											if "word_confidence" in twt["results"][0]["alternatives"][0]]
-			self.reduced_twt = [] 
+			self.reduced_twt = []
 			for twt in self.text_with_time:
 				self.reduced_twt += self.extract_word_object(twt)
 
@@ -54,7 +56,7 @@ class TextProcessing:
 		global Lemma
 		self.modified_transcript = ""
 		reg = re.compile("\s+|\.") #splitted by space and dot
-		keys = Cont.keys() 
+		keys = Cont.keys()
 		for word in reg.split(self.full_transcript):
 			if word != "" and word != "\n":
 				if word in keys:
@@ -69,8 +71,8 @@ class TextProcessing:
 
 
 	def extract_word_object(self, word_with_time):
-		return [{"word": word_info[0], 
-				 "time": {"start_time": float(word_info[1]), 
+		return [{"word": word_info[0],
+				 "time": {"start_time": float(word_info[1]),
 						 "stop_time": float(word_info[2])
 						 }
 				} for word_info in word_with_time["results"][0]["alternatives"][0]["timestamps"]]
@@ -101,16 +103,21 @@ class TextProcessing:
 			self.compressed_twt.append({"word": key, "time": compressed_twt[key]})
 
 	def construct_basic_data(self):
-		return {"words_with_time": self.compressed_twt, 
-				"raw_transcript": self.full_transcript, 
+		return {"video_id": self.video_id,
+				"words_with_time": self.compressed_twt,
+				"raw_transcript": self.full_transcript,
 				"processed_transcript": self.modified_transcript}
 
+	def write_to_db(self):
+		global VideosTextDb
+		self.eliminate_contraction()
+		self.compress_twt()
+		print(VideoInfoCollection.insert(self.construct_basic_data()))
 
-# x = TextProcessing(1)
-# x.read_f_transcript('./output/hypotheses.txt')
-# x.read_f_text_time('./output/0.json.txt')
-# x.eliminate_contraction()
-# x.compress_twt()
-# data = x.construct_basic_data()
-# f = open("a.txt", "w")
-# f.write(json.dumps(data))
+
+
+
+x = TextProcessing("obama talk")
+x.read_f_transcript('./output/hypotheses.txt')
+x.read_f_text_time('./output/0.json.txt')
+x.write_to_db()
