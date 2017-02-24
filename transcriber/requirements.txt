@@ -4,3 +4,5 @@ requests>=2.8.1
 Twisted>=13.2.0
 txaio>=2.0.4
 service_identity>=16.0.0
+youtube_dl>=2014.02.14
+nltk
