@@ -58,9 +58,7 @@ class TextProcessing:
 		for word in reg.split(self.full_transcript):
 			if word != "" and word != "\n":
 				if word in keys:
-					print Cont[word]
 					word = Cont[word][0]
-					print word
 				else:
 					tag = Pos_tag([word])[0][1]
 					pos_type = "n"

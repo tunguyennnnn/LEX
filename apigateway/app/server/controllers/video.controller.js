@@ -1,4 +1,4 @@
-const VideoInfo = require('../models/videoInfo.model')
+const VideoInfo = require('../models/videoInfo.model');
 
 /**
  * Get video list.
@@ -11,6 +11,23 @@ function list (req, res, next) {
   VideoInfo.list({ limit, skip })
     .then(videos => res.json(videos))
     .catch(e => next(e))
+
 }
 
-module.exports = { list }
+
+function postVideo(req, res, next){
+  console.log(req.body);
+  var d;
+  VideoInfo.find({}, function(err, data){
+    if (err) console.log(error);
+    res.json({message: data});
+  });
+
+}
+
+function videoSearch(req, res, next){
+  console.log(req.body);
+  res.json({searchResult: "hello"})
+}
+
+module.exports = { list, postVideo, videoSearch }

@@ -1,7 +1,8 @@
 const devConfig = {
   env: 'development',
   MONGOOSE_DEBUG: true,
-  db: 'mongodb://localhost/api_server',
+  db: process.env.REMOTE_MONGO,
+  secret: 'tusamjavier',
   port: 4000
 }
 
