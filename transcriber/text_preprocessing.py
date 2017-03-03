@@ -15,6 +15,7 @@ CompressedTWTCollection = VideosTextDb.compressedTWT
 VideoInfoCollection = VideosTextDb.text_with_time
 Lemma = WordNetLemmatizer()
 Pos_tag = nltk.pos_tag
+Stop_words = stopwords.words("english")
 
 
 class TextProcessing:
@@ -92,8 +93,8 @@ class TextProcessing:
 			if word in contraction_keys:
 				new_words = Cont[word][0].split(" ")
 				for new_word in new_words:
-					compressed_twt.setdefault(new_word, [])
-					compressed_twt[new_word].append(time)
+					# compressed_twt.setdefault(new_word, [])
+					# compressed_twt[new_word].append(time)
 					self.uncompressed_twt.append({"word": new_word, "original_word": word, "time": time})
 			else:
 				tag = Pos_tag([word])[0][1] #-> Pos_tag(["geese"]) -> [("geese", "NN")]
@@ -101,8 +102,9 @@ class TextProcessing:
 				if tag.find("VB") != -1: #is a verb
 					pos_type ="v"
 				new_word = Lemma.lemmatize(word, pos=pos_type)
-				compressed_twt.setdefault(new_word,[])
-				compressed_twt[new_word].append(time)
+				if not word in Stop_words:
+					compressed_twt.setdefault(new_word,[])
+					compressed_twt[new_word].append(time)
 				self.uncompressed_twt.append({"word": new_word, "orginal_word": word,"time": time})
 		for key in compressed_twt.keys():
 			self.compressed_twt.append({"word": key, "time": compressed_twt[key]})
