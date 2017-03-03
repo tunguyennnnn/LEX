@@ -4,9 +4,12 @@ const httpStatus = require('http-status');
 const APIError = require('../helpers/APIError');
 
 const UserSchemma = new mongoose.Schema({
-  username: {type: String, required: true, unique: true},
+  firstName: {type: String, required: true},
+  lastName: {type: String, required: true},
   password: {type: String, required: true},
   email: {type: String, unique: true, required: true},
+  history: {type: Array, default: []},
+  bookmark: {type: Array, default: []},
   createdAt: {
     type: Date,
     default: Date.now
@@ -16,16 +19,21 @@ const UserSchemma = new mongoose.Schema({
 
 UserSchemma.statics = {
   validationSchemma: {
-    username: {
+    firstName: {
       notEmpty: true,
-      isLength: {
-        options: [{min: 4, max: 20}],
-      },
-      errorMessage: 'Invalid Username Field'
+      errorMessage: 'Invalid First Name. First Name is required'
+    },
+    lastName: {
+      notEmpty: true,
+      errorMessage: 'Invalid Last Name. Last name is required'
     },
     password: {
       notEmpty: true,
-      errorMessage: 'Invalid Password'
+      isLength: {
+        options: [{min: 6}],
+        errorMessage: 'Minimum length of password is 6'
+      },
+      errorMessage: 'Invalid Password Field'
     },
     email: {
       notEmpty: true,
