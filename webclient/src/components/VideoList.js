@@ -1,0 +1,27 @@
+import React from 'react'
+
+import VideoListItem from './VideoListItem'
+
+export default class VideoList extends React.Component {
+  render () {
+    const { videos, listName } = this.props
+
+    const videoListItems = videos.map((v) =>
+      <VideoListItem
+        key={v.id}
+        id={v.id}
+        thumbnailUrl={v.thumbnailUrl}
+        title={v.title}
+        duration={v.duration} />
+    )
+
+    return (
+      <div class='video-list-block'>
+        <h2 class='video-list-title'>{listName}</h2>
+        <ul class='video-list'>
+          {videoListItems}
+        </ul>
+      </div>
+    )
+  }
+}
