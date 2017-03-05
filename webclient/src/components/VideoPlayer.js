@@ -47,27 +47,22 @@ export default class VideoPlayer extends Component {
   }
 
   updateMarkers (markers) {
-    this.player.markers.add(markers)
+    this.player.markers.reset(markers)
   }
 
   componentWillUnmount () {
-    console.log('will unmount')
     this.player.dispose()
-    this.props.cleanMarkers()
+    this.props.clearMarkers()
   }
 
   componentDidUpdate () {
     console.log('componentDidUpdate')
+    if (this.props.markers.length) {
+      this.updateMarkers(this.props.markers)
+    }
   }
 
   render () {
-    const { markers } = this.props
-
-    console.log('update markers', markers)
-    if (markers.length) {
-      this.updateMarkers(markers)
-    }
-
     const videoPlayerClasses = cx({
       'video-js': true,
       'vjs-default-skin': true,

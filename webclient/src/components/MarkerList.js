@@ -4,7 +4,11 @@ export default class MarkerList extends React.Component {
   render () {
     const { markers } = this.props
 
-    const mappedMarkers = markers.map((marker, i) => <li key={i}>{marker.text}</li>)
+    const mappedMarkers = markers.map((marker, i) =>
+      <li onClick='' key={i}>
+        <span class='marker-time'>{marker.time}</span> {marker.text}
+      </li>
+    )
 
     return (
       <ul class='mark-list'>

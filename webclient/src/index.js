@@ -3,6 +3,7 @@ import './styles/video.css'
 import 'videojs-markers/dist/videojs.markers.css'
 import './styles/index.css'
 import './styles/videolist.css'
+import './styles/markerlist.css'
 
 import 'videojs-youtube/dist/Youtube.js'
 import 'videojs-markers/dist/videojs-markers.js'
