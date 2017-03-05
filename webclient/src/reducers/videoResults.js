@@ -1,8 +1,10 @@
+import * as ActionTypes from '../ActionTypes'
+
 export default function reducer (state = [], action) {
   switch (action.type) {
-    case 'RECEIVED_VIDEOS':
+    case ActionTypes.RECEIVED_VIDEOS:
       return action.payload.videos
-    case 'CLEARED_SEARCH_RESULTS':
+    case ActionTypes.CLEARED_VIDEOS_RESULTS:
       return []
     default:
       return state

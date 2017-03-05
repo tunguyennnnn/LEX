@@ -1,10 +1,10 @@
 import React from 'react'
 
-export default function VideoSearchInput ({ value, onChange }) {
+export default function MarkerSearchInput ({ value, onChange }) {
   return (
     <input
       type='text'
-      placeholder='Search for a Video...'
+      placeholder='Search for text within the video...'
       onChange={(evt) => onChange(evt.target.value)}
     />
   )

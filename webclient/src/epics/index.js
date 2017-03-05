@@ -1,8 +1,13 @@
 import { combineEpics } from 'redux-observable'
+
 import searchVideos from './searchVideos'
-import clearSearchResults from './clearSearchResults'
+import clearVideoResults from './clearVideoResults'
+import searchMarkers from './searchMarkers'
+import clearMarkerResults from './clearMarkerResults'
 
 export default combineEpics(
   searchVideos,
-  clearSearchResults
+  clearVideoResults,
+  searchMarkers,
+  clearMarkerResults
 )

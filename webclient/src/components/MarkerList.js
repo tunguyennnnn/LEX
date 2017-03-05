@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default class Layout extends React.Component {
+export default class MarkerList extends React.Component {
   render () {
     const { markers } = this.props
 

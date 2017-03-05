@@ -10,7 +10,7 @@ const DEFAULT_VIDEO_OPTIONS = {
   controls: true
 }
 
-class Player extends Component {
+export default class VideoPlayer extends Component {
   constructor () {
     super()
     this.state = {
@@ -77,11 +77,3 @@ class Player extends Component {
     return <video id='aVideo' class={videoPlayerClasses} />
   }
 }
-
-Player.propTypes = {
-  src: React.PropTypes.string.isRequired,
-  options: React.PropTypes.object,
-  markers: React.PropTypes.array
-}
-
-export default Player

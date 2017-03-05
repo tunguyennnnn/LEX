@@ -1,4 +1,5 @@
-import { receiveVideos } from '../actions/videoSearchActions'
+import * as ActionTypes from '../ActionTypes'
+import { receiveVideos } from '../actions/videoSearch'
 // import { ajax } from 'rxjs/observable/dom/ajax'
 
 import { Observable } from 'rxjs/Observable'
@@ -49,12 +50,12 @@ export default function searchVideos (action$) {
     duration: '8234'
   }]
 
-  return action$.ofType('SEARCHED_VIDEOS')
+  return action$.ofType(ActionTypes.SEARCHED_VIDEOS)
     .map(action => action.payload.query)
     .filter(q => !!q)
     .switchMap(q =>
       Observable.timer(800) // debounce
-        .takeUntil(action$.ofType('CLEARED_SEARCH_RESULTS'))
+        .takeUntil(action$.ofType(ActionTypes.CLEARED_SEARCH_RESULTS))
         .do(() => console.info(`Performing query: "${q}"`))
         .mergeMap(() =>
           Observable.of(videos)

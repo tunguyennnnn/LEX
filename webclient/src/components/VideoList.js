@@ -6,9 +6,9 @@ export default class VideoList extends React.Component {
   render () {
     const { videos, listName } = this.props
 
-    const videoListItems = videos.map((v) =>
+    const videoListItems = videos.map((v, i) =>
       <VideoListItem
-        key={v.id}
+        key={i}
         id={v.id}
         thumbnailUrl={v.thumbnailUrl}
         title={v.title}

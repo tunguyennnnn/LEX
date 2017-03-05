@@ -1,15 +1,14 @@
 import { combineReducers } from 'redux'
 
-import tweets from './tweetsReducer'
-import user from './userReducer'
-import markers from './markersReducer'
-import videoResults from './videoResultsReducer'
-import videoSearch from './videoSearchReducer'
+// import markers from './markersReducer'
+import videoResults from './videoResults'
+import videoSearch from './videoSearch'
+import markerResults from './markerResults'
+import markerSearch from './markerSearch'
 
 export default combineReducers({
-  tweets,
-  user,
-  markers,
   videoResults,
-  videoSearch
+  videoSearch,
+  markerResults,
+  markerSearch
 })

@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { searchVideos } from '../actions/videoSearchActions'
+import { searchVideos } from '../actions/videoSearch'
 
-import VideoSearchInput from './VideoSearchInput'
-import VideoList from './VideoList'
+import VideoSearchInput from '../components/VideoSearchInput'
+import VideoList from '../components/VideoList'
 
 @connect((store) => ({
   videos: store.videoResults,
@@ -12,7 +12,7 @@ import VideoList from './VideoList'
 }),
   { searchVideos }
 )
-export default class SearchVideo extends React.Component {
+export default class SearchVideoContainer extends React.Component {
   constructor (props) {
     super(props)
     this.handleVideoSearch = this.handleVideoSearch.bind(this)

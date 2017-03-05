@@ -12,8 +12,8 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { Router, Route, hashHistory } from 'react-router'
 
-import SearchVideo from './components/SearchVideo'
-import Video from './components/Video'
+import SearchVideoContainer from './containers/SearchVideoContainer'
+import PlayerContainer from './containers/PlayerContainer'
 import configureStore from './configureStore'
 
 const store = configureStore()
@@ -21,8 +21,8 @@ const store = configureStore()
 ReactDOM.render(
   <Provider store={store}>
     <Router history={hashHistory}>
-      <Route path='/' component={SearchVideo} />
-      <Route path='/video/:videoId' component={Video} />
+      <Route path='/' component={SearchVideoContainer} />
+      <Route path='/video/:videoId' component={PlayerContainer} />
     </Router>
   </Provider>,
   document.getElementById('root')
