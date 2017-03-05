@@ -11,7 +11,8 @@ export default function configureStore () {
     rootReducer,
     compose(
       applyMiddleware(
-        logger
+        logger(),
+        epicMiddleware
       )
     )
   )

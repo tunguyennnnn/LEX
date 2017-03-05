@@ -50,14 +50,12 @@ export default function searchVideos (action$) {
   }]
 
   return action$.ofType('SEARCHED_VIDEOS')
-    .do((action) => console.log('performing query', action))
     .map(action => action.payload.query)
-    .do((action) => console.log('performing query', action))
     .filter(q => !!q)
     .switchMap(q =>
       Observable.timer(800) // debounce
         .takeUntil(action$.ofType('CLEARED_SEARCH_RESULTS'))
-        .do((f) => console.log('performing query'))
+        .do(() => console.info(`Performing query: "${q}"`))
         .mergeMap(() =>
           Observable.of(videos)
             .do((f) => console.log(f))
