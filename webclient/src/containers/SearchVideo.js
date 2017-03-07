@@ -12,7 +12,7 @@ import VideoList from '../components/VideoList'
 }),
   { searchVideos }
 )
-export default class SearchVideoContainer extends React.Component {
+export default class SearchVideo extends React.Component {
   constructor (props) {
     super(props)
     this.handleVideoSearch = this.handleVideoSearch.bind(this)

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { searchMarkers, clearMarkersResults, receiveMarkers } from '../actions/markerSearch'
 
-import SearchMarkerContainer from './SearchMarkerContainer'
+import SearchMarker from './SearchMarker'
 import VideoPlayer from '../components/VideoPlayer'
 
 @connect((store) => ({
@@ -12,7 +12,7 @@ import VideoPlayer from '../components/VideoPlayer'
 }),
   { searchMarkers, clearMarkersResults, receiveMarkers }
 )
-export default class PlayerContainer extends React.Component {
+export default class Player extends React.Component {
   constructor (props) {
     super(props)
     this.handleMarkerSearch = this.handleMarkerSearch.bind(this)
@@ -39,7 +39,7 @@ export default class PlayerContainer extends React.Component {
           clearMarkers={this.handleMarkerClear}
           src={videoUrl}
         />
-        <SearchMarkerContainer
+        <SearchMarker
           markers={markers}
           loading={markerSearchLoading}
           searchMarkers={this.handleMarkerSearch}

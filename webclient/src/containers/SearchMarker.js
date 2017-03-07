@@ -3,7 +3,7 @@ import React from 'react'
 import MarkerSearchInput from '../components/MarkerSearchInput'
 import MarkerList from '../components/MarkerList'
 
-export default class SearchMarkerContainer extends React.Component {
+export default class SearchMarker extends React.Component {
   constructor (props) {
     super(props)
     this.handleMarkerSearch = this.handleMarkerSearch.bind(this)

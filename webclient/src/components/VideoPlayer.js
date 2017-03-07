@@ -57,9 +57,7 @@ export default class VideoPlayer extends Component {
 
   componentDidUpdate () {
     console.log('componentDidUpdate')
-    if (this.props.markers.length) {
-      this.updateMarkers(this.props.markers)
-    }
+    this.updateMarkers(this.props.markers)
   }
 
   render () {
