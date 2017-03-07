@@ -11,9 +11,8 @@
 }
 
 .video-list-title {
-  font-size: 16px;
   margin: 0 0 8px 0;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .video-list {
@@ -26,8 +25,9 @@
 }
 
 .video-list-item {
-    width: 24vw;
+    width: 20vw;
     padding-bottom: 14px;
+    margin-right: 2px;
 }
 
  .video-list-item-link {

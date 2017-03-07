@@ -1,11 +1,13 @@
-const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { resolve } = require('path')
 
 const env = process.env.NODE_ENV
 const dev = env !== 'production'
 
 const plugins = [
+  new webpack.HotModuleReplacementPlugin(),
+  new webpack.NamedModulesPlugin(),
   new webpack.ProvidePlugin({
     $: 'jquery',
     jQuery: 'jquery',
@@ -22,10 +24,16 @@ const plugins = [
 module.exports = {
   devtool: dev ? 'inline-sourcemap' : null,
   entry: {
-    lex: ['./src/index.js']
+    lex: [
+      'react-hot-loader/patch',
+      'webpack-dev-server/client?http://localhost:8001',
+      'webpack/hot/only-dev-server',
+      './src/index.js'
+    ]
   },
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: resolve(__dirname, 'dist'),
+    publicPath: '/',
     filename: '[name].js',
     library: 'lex',
     libraryTarget: 'umd'

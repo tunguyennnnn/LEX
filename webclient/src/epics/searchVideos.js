@@ -48,6 +48,11 @@ export default function searchVideos (action$) {
     thumbnailUrl: 'http://scienceblogs.com/startswithabang/files/2013/02/2xcluster.jpg',
     title: 'Far from earth',
     duration: '8234'
+  }, {
+    id: 'FSbImq-uzFk',
+    thumbnailUrl: 'http://scienceblogs.com/startswithabang/files/2013/02/2xcluster.jpg',
+    title: 'Really Far from earth',
+    duration: '82222'
   }]
 
   return action$.ofType(ActionTypes.SEARCHED_VIDEOS)
@@ -55,7 +60,7 @@ export default function searchVideos (action$) {
     .filter(q => !!q)
     .switchMap(q =>
       Observable.timer(800) // debounce
-        .takeUntil(action$.ofType(ActionTypes.CLEARED_SEARCH_RESULTS))
+        .takeUntil(action$.ofType(ActionTypes.CLEARED_VIDEOS_RESULTS))
         .do(() => console.info(`Performing query: "${q}"`))
         .mergeMap(() =>
           Observable.of(videos)

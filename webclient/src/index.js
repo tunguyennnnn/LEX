@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import 'video.js/dist/video-js.css'
 import './styles/video.css'
 import 'videojs-markers/dist/videojs.markers.css'
@@ -10,25 +11,33 @@ import 'videojs-youtube/dist/Youtube.js'
 import 'videojs-markers/dist/videojs-markers.js'
 
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import { Router, Route, IndexRoute, hashHistory } from 'react-router'
+import { render } from 'react-dom'
+import { browserHistory } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
 
-import SearchVideo from './containers/SearchVideo'
-import Player from './containers/Player'
-import Layout from './containers/Layout'
+import { AppContainer } from 'react-hot-loader'
+import Root from './containers/Root'
+
 import configureStore from './configureStore'
 
 const store = configureStore()
+const history = syncHistoryWithStore(browserHistory, store)
 
-ReactDOM.render(
-  <Provider store={store}>
-    <Router history={hashHistory}>
-      <Route path='/' component={Layout}>
-        <IndexRoute component={SearchVideo} />
-        <Route path='/video/:videoId' component={Player} />
-      </Route>
-    </Router>
-  </Provider>,
+render(
+  <AppContainer>
+    <Root store={store} history={history} />
+  </AppContainer>,
   document.getElementById('root')
 )
+
+if (module.hot) {
+  module.hot.accept('./containers/Root', () => {
+    const NewRoot = require('./containers/Root').default
+    render(
+      <AppContainer>
+        <NewRoot store={store} history={history} />
+      </AppContainer>,
+      document.getElementById('root')
+    )
+  })
+}

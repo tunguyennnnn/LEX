@@ -17,7 +17,7 @@ export default class VideoList extends React.Component {
 
     return (
       <div class='video-list-block'>
-        <h2 class='video-list-title'>{listName}</h2>
+        <h5 class='video-list-title'>{listName}</h5>
         <ul class='video-list'>
           {videoListItems}
         </ul>

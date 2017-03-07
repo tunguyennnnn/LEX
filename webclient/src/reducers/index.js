@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { routerReducer as routing } from 'react-router-redux'
 
 // import markers from './markersReducer'
 import videoResults from './videoResults'
@@ -10,5 +11,6 @@ export default combineReducers({
   videoResults,
   videoSearch,
   markerResults,
-  markerSearch
+  markerSearch,
+  routing
 })
