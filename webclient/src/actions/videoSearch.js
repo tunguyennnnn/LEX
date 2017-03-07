@@ -20,6 +20,6 @@ export function searchVideos (query) {
 
 export function clearVideoResults () {
   return {
-    type: ActionTypes.CLEARED_SEARCH_RESULTS
+    type: ActionTypes.CLEARED_VIDEOS_RESULTS
   }
 }

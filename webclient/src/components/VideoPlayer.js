@@ -47,7 +47,9 @@ export default class VideoPlayer extends Component {
   }
 
   updateMarkers (markers) {
-    this.player.markers.reset(markers)
+    if (this.player) {
+      this.player.markers.reset(markers)
+    }
   }
 
   componentWillUnmount () {

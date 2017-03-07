@@ -18,16 +18,6 @@ export default class SearchVideo extends React.Component {
     this.handleVideoSearch = this.handleVideoSearch.bind(this)
   }
 
-  // componentDidMount () {
-  //   this.handleVideoSearch(this.props.query)
-  // }
-
-  // componentWillReceiveProps (nextProps) {
-  //   if (this.props.query !== nextProps.query) {
-  //     this.handleVideoSearch(nextProps.query)
-  //   }
-  // }
-
   handleVideoSearch (query) {
     this.props.searchVideos(query)
   }
