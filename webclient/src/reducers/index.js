@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import { routerReducer as routing } from 'react-router-redux'
+import { reducer as formReducer } from 'redux-form'
 
 // import markers from './markersReducer'
 import videoResults from './videoResults'
@@ -12,5 +13,6 @@ export default combineReducers({
   videoSearch,
   markerResults,
   markerSearch,
-  routing
+  routing,
+  form: formReducer
 })

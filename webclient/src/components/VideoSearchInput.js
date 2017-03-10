@@ -1,10 +1,11 @@
 import React from 'react'
+import TextField from 'material-ui/TextField';
 
 export default function VideoSearchInput ({ value, onChange }) {
   return (
-    <input
-      type='text'
-      placeholder='Search for a Video...'
+    <TextField
+      hintText="Search for a Video..."
+      fullWidth={true}
       onChange={(evt) => onChange(evt.target.value)}
     />
   )
