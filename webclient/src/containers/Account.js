@@ -1,15 +1,23 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
-import SignUpForm from '../components/SignUpForm'
+import { authentificate, logout } from '../actions/auth'
 
+@connect((store) => ({
+  isAuthenticated: store.auth.isAuthenticated,
+  profile: store.auth.profile
+}),
+  { authentificate, logout }
+)
 export default class Account extends React.Component {
-  handleSubmit = (values) => {
-    // Do something with the form values
-    console.log(values)
-  }
   render () {
+    const { logout, profile } = this.props
     return (
-      <SignUpForm onSubmit={this.handleSubmit} />
+      <ul class='list-inline'>
+        <li><img src={profile.picture} height='40px' /></li>
+        <li><span>Welcome, {profile.nickname}</span></li>
+        <li><button onClick={logout}>Logout</button></li>
+      </ul>
     )
   }
 }

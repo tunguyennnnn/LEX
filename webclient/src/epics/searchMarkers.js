@@ -14,7 +14,7 @@ import 'rxjs/add/operator/takeUntil'
 
 export default function searchMarkers (action$) {
   const markers = [ {
-    time: 45,
+    time: 12,
     text: 'this'
   }, {
     time: 156,

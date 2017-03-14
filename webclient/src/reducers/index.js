@@ -7,8 +7,10 @@ import videoResults from './videoResults'
 import videoSearch from './videoSearch'
 import markerResults from './markerResults'
 import markerSearch from './markerSearch'
+import auth from './auth'
 
 export default combineReducers({
+  auth: auth,
   videoResults,
   videoSearch,
   markerResults,

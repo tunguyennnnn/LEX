@@ -108,5 +108,9 @@
 .navbar>.list>.navbar-item.-link:hover,
 .navbar>.list>.navbar-item.-link:focus {
     color: #333;
-    border-bottom-color: #9b4dca;
+    border-bottom-color: rgb(0, 188, 212);
+}
+
+.navbar-avatar {
+    vertical-align: middle;
 }

@@ -1,10 +1,11 @@
 import React from 'react'
+import TextField from 'material-ui/TextField'
 
 export default function MarkerSearchInput ({ value, onChange }) {
   return (
-    <input
+    <TextField
+      hintText='Search for text within the video...'
       type='text'
-      placeholder='Search for text within the video...'
       onChange={(evt) => onChange(evt.target.value)}
     />
   )
