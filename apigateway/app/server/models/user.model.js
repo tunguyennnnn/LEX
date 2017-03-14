@@ -8,8 +8,26 @@ const UserSchemma = new mongoose.Schema({
   lastName: {type: String, required: true},
   password: {type: String, required: true},
   email: {type: String, unique: true, required: true},
-  history: {type: Array, default: []},
-  bookmark: {type: Array, default: []},
+  history: {
+    type: [{
+      videoId: mongoose.Schema.Types.ObjectId,
+      watchedAt: {
+        type: Date,
+        default: Date.now
+      }
+    }],
+    default: []
+  },
+  bookmark: {
+    type: [{
+      videoId: mongoose.Schema.Types.ObjectId,
+      markedAt: {
+        type: Date,
+        default: Date.now
+      }
+    }],
+    default: []
+  },
   createdAt: {
     type: Date,
     default: Date.now
