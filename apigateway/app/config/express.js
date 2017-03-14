@@ -11,6 +11,8 @@ const winstonInstance = require('./winston')
 const routes = require('../server/routes/index.route')
 const config = require('./env')
 const APIError = require('../server/helpers/APIError')
+const jwt = require('jsonwebtoken')
+const expressValidator = require('express-validator');
 
 const app = express()
 
@@ -20,9 +22,11 @@ if (config.env === 'development') {
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(expressValidator());
 app.use(compress())
 app.use(methodOverride())
 app.use(helmet())
+
 
 if (config.env === 'development') {
   expressWinston.requestWhitelist.push('body')
@@ -32,7 +36,8 @@ if (config.env === 'development') {
     meta: true,
     msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
     colorStatus: true
-  }))
+  }));
+  app.set('superSecret', config.secret);
 }
 
 app.get('/', (req, res) =>

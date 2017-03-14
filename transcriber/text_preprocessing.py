@@ -9,9 +9,13 @@ import re
 
 
 
-Client = MongoClient('localhost', 27017)
+Client = MongoClient(os.environ.get("REMOTE_MONGO"))
+VideosTextDb = Client.videostext
+CompressedTWTCollection = VideosTextDb.compressedTWT
+VideoInfoCollection = VideosTextDb.text_with_time
 Lemma = WordNetLemmatizer()
 Pos_tag = nltk.pos_tag
+Stop_words = stopwords.words("english")
 
 
 class TextProcessing:
@@ -23,8 +27,9 @@ class TextProcessing:
 			- stopwords
 			- lemmatize words
 	'''
-	def __init__(self, video_id, text_with_time = {}, full_transcript = "", db_name = 'videostext', collection='text_with_time'):
-		self.video_id = id
+	def __init__(self, video_id, video_title, text_with_time = {}, full_transcript = "", db_name = 'videostext', collection='text_with_time'):
+		self.title = video_title
+		self.video_id = video_id
 		self.db_name = db_name
 		self.collection = collection
 		self.text_with_time = text_with_time  #format follows what Watson returns
@@ -39,9 +44,9 @@ class TextProcessing:
 		with open(file_path) as text_time_file:
 			data = '[' + text_time_file.read() + ']'
 			data = json.loads(data.replace('}{', '},{'))
-			self.text_with_time = [twt for twt in data 
+			self.text_with_time = [twt for twt in data
 											if "word_confidence" in twt["results"][0]["alternatives"][0]]
-			self.reduced_twt = [] 
+			self.reduced_twt = []
 			for twt in self.text_with_time:
 				self.reduced_twt += self.extract_word_object(twt)
 
@@ -54,13 +59,11 @@ class TextProcessing:
 		global Lemma
 		self.modified_transcript = ""
 		reg = re.compile("\s+|\.") #splitted by space and dot
-		keys = Cont.keys() 
+		keys = Cont.keys()
 		for word in reg.split(self.full_transcript):
 			if word != "" and word != "\n":
 				if word in keys:
-					print Cont[word]
 					word = Cont[word][0]
-					print word
 				else:
 					tag = Pos_tag([word])[0][1]
 					pos_type = "n"
@@ -71,8 +74,8 @@ class TextProcessing:
 
 
 	def extract_word_object(self, word_with_time):
-		return [{"word": word_info[0], 
-				 "time": {"start_time": float(word_info[1]), 
+		return [{"word": word_info[0],
+				 "time": {"start_time": float(word_info[1]),
 						 "stop_time": float(word_info[2])
 						 }
 				} for word_info in word_with_time["results"][0]["alternatives"][0]["timestamps"]]
@@ -81,6 +84,7 @@ class TextProcessing:
 		global Pos_tag
 		global Cont
 		self.compressed_twt = []
+		self.uncompressed_twt = []
 		compressed_twt = {}
 		for twt in self.reduced_twt:
 			word = twt["word"]
@@ -89,30 +93,64 @@ class TextProcessing:
 			if word in contraction_keys:
 				new_words = Cont[word][0].split(" ")
 				for new_word in new_words:
-					compressed_twt.setdefault(new_word, [])
-					compressed_twt[new_word].append(time)
+					# compressed_twt.setdefault(new_word, [])
+					# compressed_twt[new_word].append(time)
+					self.uncompressed_twt.append({"word": new_word, "original_word": word, "time": time})
 			else:
 				tag = Pos_tag([word])[0][1] #-> Pos_tag(["geese"]) -> [("geese", "NN")]
 				pos_type = "n" #default lemmatize to a nounce
-				if tag == "VBR": #is a verb
+				if tag.find("VB") != -1: #is a verb
 					pos_type ="v"
 				new_word = Lemma.lemmatize(word, pos=pos_type)
-				compressed_twt.setdefault(new_word,[])
-				compressed_twt[new_word].append(time)
+				if not word in Stop_words:
+					compressed_twt.setdefault(new_word,[])
+					compressed_twt[new_word].append(time)
+				self.uncompressed_twt.append({"word": new_word, "orginal_word": word,"time": time})
 		for key in compressed_twt.keys():
 			self.compressed_twt.append({"word": key, "time": compressed_twt[key]})
 
+	def compress_twt_v2(self):
+		global Pos_tag
+		global Cont
+		self.compressed_twt = []
+		for twt in self.reduced_twt:
+			word = twt["word"]
+			time = twt["time"]
+			contraction_keys = Cont.keys()
+			if word in contraction_keys:
+				new_words = Cont[word][0].split(" ")
+				for new_word in new_words:
+					self.compressed_twt.append({"word": new_word, "original_word": word, "time": time})
+			else:
+				tag = Pos_tag([word])[0][1] #-> Pos_tag(["geese"]) -> [("geese", "NN")]
+				pos_type = "n" #default lemmatize to a nounce
+				if tag.find("VB") != -1: #is a verb
+					pos_type ="v"
+				new_word = Lemma.lemmatize(word, pos=pos_type)
+				self.compressed_twt.append({"word": new_word, "orginal_word": word,"time": time})
+
 	def construct_basic_data(self):
-		return {"words_with_time": self.compressed_twt, 
-				"raw_transcript": self.full_transcript, 
-				"processed_transcript": self.modified_transcript}
+		return ({"video_id": self.video_id,
+				"title": self.title,
+				"words_with_time": self.compressed_twt},
+				{"video_id": self.video_id,
+				"title": self.title,
+				"words_with_time": self.uncompressed_twt,
+				"raw_transcript": self.full_transcript,
+				"processed_transcript": self.modified_transcript})
+
+	def write_to_db(self):
+		global VideosTextDb
+		self.eliminate_contraction()
+		self.compress_twt()
+		processed_twt, basic_twt = self.construct_basic_data()
+		CompressedTWTCollection.insert(processed_twt)
+		VideoInfoCollection.insert(basic_twt)
 
 
-# x = TextProcessing(1)
+
+
+# x = TextProcessing("dQw4w9WgXcQ", 'lecture')
 # x.read_f_transcript('./output/hypotheses.txt')
 # x.read_f_text_time('./output/0.json.txt')
-# x.eliminate_contraction()
-# x.compress_twt()
-# data = x.construct_basic_data()
-# f = open("a.txt", "w")
-# f.write(json.dumps(data))
+# x.write_to_db()
