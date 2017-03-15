@@ -21,8 +21,8 @@ export default (
   <Route path='/' component={Layout}>
     <IndexRoute component={SearchVideo} />
     <Route path='/login' component={LogIn} />
-    // <Route path='/video/:videoId' component={UserIsAuthenticated(Player)} />
-    <Route path='/video/:videoId' component={Player} />
+    <Route path='/video/:videoId' component={UserIsAuthenticated(Player)} />
+    // <Route path='/video/:videoId' component={Player} />
     <Route path='/account' component={UserIsAuthenticated(Account)} />
   </Route>
 )
