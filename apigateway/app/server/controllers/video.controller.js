@@ -50,12 +50,21 @@ function videoSearch(req, res, next){
     let q = req.query.q;
     if (q){
       VideoInfo.searchInVideo({id, q})
-      .then(videoInfo => res.json(videoInfo))
+      .then(videoInfo => {
+        res.json(videoInfo)
+      })
       .catch(e => res.json(e));
     }
     else{
       VideoInfo.get(id)
-      .then(video => res.json(video));
+      .then(video => {
+        if (video){
+          res.status(200).json(video);
+        }else{
+          res.status(404).json({success: false, message: 'Invalid video id'})
+        }
+      })
+      .catch(video => res.status(404));
     }
   }
   else{
