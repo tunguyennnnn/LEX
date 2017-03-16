@@ -17,11 +17,11 @@ const formatTime = (totalSeconds) => {
 
 export default class MarkerList extends React.Component {
   render () {
-    const { markers } = this.props
+    const { markers, seekTo } = this.props
 
     const mappedMarkers = markers.map((marker, i) => {
       return (
-        <span key={i}>
+        <span onTouchTap={() => seekTo(marker.time)} key={i}>
           <ListItem
             primaryText={<div class='marker-time'>{formatTime(marker.time)}</div>}
             secondaryText={

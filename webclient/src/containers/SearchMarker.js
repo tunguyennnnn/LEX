@@ -14,12 +14,12 @@ export default class SearchMarker extends React.Component {
   }
 
   render () {
-    const { markers, loading } = this.props
+    const { markers, loading, seekTo } = this.props
 
     return (
       <div class='search-container'>
         <MarkerSearchInput onChange={this.handleMarkerSearch} />
-        <MarkerList markers={markers} loading={loading} />
+        <MarkerList markers={markers} seekTo={seekTo} loading={loading} />
       </div>
     )
   }
