@@ -27,14 +27,10 @@ const VideoDetailSchema = new mongoose.Schema({
 
 VideoDetailSchema.statics = {
   search({videoId, timeStamps} = {}){
-    console.log("Dasdadasdasdadas");
-    console.log(videoId)
     let timeSet = _.flatten(timeStamps.map(function(wwt){ return wwt.time}));
     let filterCondition = {$or : timeSet.map(function(time){
       return {'words_with_time.time.start_time': {$gt: time.start_time - 5.0, $lt: time.stop_time + 5.0}}
     })}
-    console.log(videoId);
-    console.log(filterCondition)
     return this.aggregate([
       {$match: {'video_id': videoId}},
       {$unwind: '$words_with_time'},

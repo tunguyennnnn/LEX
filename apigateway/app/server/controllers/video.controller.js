@@ -1,4 +1,5 @@
 const VideoInfo = require('../models/videoInfo.model');
+const mongoose = require('mongoose');
 /**
  * Get video list.
  * @property {number} req.query.skip - Number of videos to be skipped.
@@ -45,15 +46,20 @@ function postVideo(req, res, next){
 
 function videoSearch(req, res, next){
   let id = req.params.video_id;
-  let q = req.query.q;
-  if (q){
-    VideoInfo.searchInVideo({id, q})
-    .then(videoInfo => res.json(videoInfo))
-    .catch(e => res.json(e));
+  if (mongoose.Types.ObjectId.isValid(id)){
+    let q = req.query.q;
+    if (q){
+      VideoInfo.searchInVideo({id, q})
+      .then(videoInfo => res.json(videoInfo))
+      .catch(e => res.json(e));
+    }
+    else{
+      VideoInfo.get(id)
+      .then(video => res.json(video));
+    }
   }
   else{
-    VideoInfo.get(id)
-    .then(video => res.json(video));
+    res.status(404).json({success: false, message: 'Invalid video id'});
   }
 
 }

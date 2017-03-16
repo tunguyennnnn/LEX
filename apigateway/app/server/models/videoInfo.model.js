@@ -44,12 +44,9 @@ VideoInfoSchema.statics = {
    * @returns {Promise}
    */
   get (id) {
-    console.log("dasdadadada")
-    console.log(id);
     return this.findById(id)
       .exec()
       .then((video) => {
-        console.log(video)
         if (video) {
           return video
         }
