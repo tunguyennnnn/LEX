@@ -66,6 +66,7 @@ export function authenticate () {
         localStorage.setItem('profile', JSON.stringify(profile))
         localStorage.setItem('id_token', authResult.idToken)
         dispatch(loginSuccess(profile))
+
         return dispatch(fetchUser())
       })
     })

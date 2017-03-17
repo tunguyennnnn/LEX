@@ -1,16 +1,12 @@
 import React from 'react'
 import { Route, IndexRoute } from 'react-router'
 
-import { Authenticated, NotAuthenticated } from './utils/auth'
+import { Authenticated } from './utils/auth'
 
 import SearchVideo from './containers/SearchVideo'
 import Player from './containers/Player'
 import Layout from './containers/Layout'
 import Account from './containers/Account'
-// import Login from './containers/LogIn'
-    // <Route component={NotAuthenticated}>
-    //   <Route path='login' component={Login} />
-    // </Route>
 
 export default (
   <Route path='/' component={Layout}>
