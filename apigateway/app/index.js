@@ -1,5 +1,9 @@
 const mongoose = require('mongoose')
 const util = require('util')
+const dotenv = require('dotenv')
+
+dotenv.config()
+console.log(process.env)
 
 const config = require('./config/env')
 const app = require('./config/express')

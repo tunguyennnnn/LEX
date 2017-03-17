@@ -3,6 +3,7 @@ const devConfig = {
   MONGOOSE_DEBUG: true,
   db: process.env.REMOTE_MONGO || 'mongodb://localhost/videostext',
   secret: 'tusamjavier',
+  port: process.env.PORT || 4000
 }
 
 module.exports = devConfig
