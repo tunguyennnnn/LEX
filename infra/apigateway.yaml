@@ -16,7 +16,7 @@ kind: Deployment
 metadata:
   name: apigateway
 spec:
-  replicas: 3 # number of instances
+  replicas: 2 # number of instances
   template:
     metadata:
       labels:
@@ -26,22 +26,22 @@ spec:
     spec:
       containers:
       - name: apigateway
-        image: gcr.io/<OUR-PROJECT-ID>/app
+        image: "gcr.io/lexv-159619/apigateway:v0.0.2"
         env:
-        - name: PORT
-          value: "4000"
-        - name: NODE_ENV
-          value: "production"
-        - name: AUTH0_SECRET
-           valueFrom:
-             secretKeyRef:
-               name: apigateway-secret
-               key: auth0_secret
-        - name: AUTH0_AUDIENCE
-           valueFrom:
-             secretKeyRef:
-               name: apigateway-secret
-               key: auth0_audience
+          - name: PORT
+            value: "4000"
+          - name: NODE_ENV
+            value: "production"
+          - name: AUTH0_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: apigateway-secret
+                key: auth0_secret
+          - name: AUTH0_AUDIENCE
+            valueFrom:
+              secretKeyRef:
+                name: apigateway-secret
+                key: auth0_audience
         ports:
         - name: http
           containerPort: 4000
