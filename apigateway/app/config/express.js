@@ -26,21 +26,21 @@ app.use(compress())
 app.use(methodOverride())
 app.use(helmet())
 
-if (config.env === 'development') {
-  expressWinston.requestWhitelist.push('body')
-  expressWinston.responseWhitelist.push('body')
-  app.use(expressWinston.logger({
-    winstonInstance,
-    meta: true,
-    msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
-    colorStatus: true
-  }))
-  app.set('superSecret', config.secret)
-}
+// if (config.env === 'development') {
+expressWinston.requestWhitelist.push('body')
+expressWinston.responseWhitelist.push('body')
+app.use(expressWinston.logger({
+  winstonInstance,
+  meta: true,
+  msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
+  colorStatus: true
+}))
+app.set('superSecret', config.secret)
+// }
 
-app.get('/', (req, res) =>
-  res.send('hello_worldasd asdd')
-)
+// app.get('/', (req, res) =>
+//   res.send('hello_worldasd asdd')
+// )
 // mount all routes on /api path
 app.use('/api', routes)
 
