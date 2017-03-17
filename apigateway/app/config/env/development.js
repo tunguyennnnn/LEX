@@ -1,3 +1,7 @@
+const dotenv = require('dotenv')
+
+dotenv.config()
+
 const devConfig = {
   env: 'development',
   MONGOOSE_DEBUG: true,

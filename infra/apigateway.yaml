@@ -32,6 +32,16 @@ spec:
           value: "4000"
         - name: NODE_ENV
           value: "production"
+        - name: AUTH0_SECRET
+           valueFrom:
+             secretKeyRef:
+               name: apigateway-secret
+               key: auth0_secret
+        - name: AUTH0_AUDIENCE
+           valueFrom:
+             secretKeyRef:
+               name: apigateway-secret
+               key: auth0_audience
         ports:
         - name: http
           containerPort: 4000
