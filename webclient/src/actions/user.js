@@ -1,8 +1,11 @@
 import * as ActionTypes from '../ActionTypes'
 
-export function fetchedUser () {
+export function fetchedUser (user) {
   return {
-    type: ActionTypes.FETCH_USER_SUCCESS
+    type: ActionTypes.FETCH_USER_SUCCESS,
+    payload: {
+      user
+    }
   }
 }
 

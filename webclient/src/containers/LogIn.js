@@ -9,16 +9,14 @@ import { login, authenticate } from '../actions/auth'
   { login, authenticate }
 )
 export default class Login extends React.Component {
-  constructor (props) {
-    super(props)
-    this.props.authenticate()
+
+  componentDidMount () {
+    this.props.login()
   }
 
   render () {
-    const { login } = this.props
     return (
       <div>
-        <button onClick={login}>Login</button>
       </div>
     )
   }

@@ -1,9 +1,23 @@
 /* global localStorage */
 import Auth0Lock from 'auth0-lock'
 
+import { push } from 'react-router-redux'
+
+import { fetchUser } from './user'
+
 import * as ActionTypes from '../ActionTypes'
 
-const lock = new Auth0Lock('nvLJm1LMmmocO3YFIj4OWVmqkOI9kzuM', 'saneod.auth0.com')
+const lockOptions = {
+  theme: {
+    primaryColor: '#00bcd4',
+    logo: ''
+    // logo: 'http://www.imageno.com/thumbs/20170316/zepi688n09yn.jpg'
+  },
+  languageDictionary: {
+    title: 'LEX'
+  }
+}
+const lock = new Auth0Lock('nvLJm1LMmmocO3YFIj4OWVmqkOI9kzuM', 'saneod.auth0.com', lockOptions)
 
 function loginSuccess (profile) {
   return {
@@ -36,6 +50,7 @@ export function logout () {
   return dispatch => {
     localStorage.removeItem('id_token')
     localStorage.removeItem('profile')
+    dispatch(push('/'))
     return dispatch(logoutSuccess())
   }
 }
@@ -50,8 +65,13 @@ export function authenticate () {
 
         localStorage.setItem('profile', JSON.stringify(profile))
         localStorage.setItem('id_token', authResult.idToken)
-        return dispatch(loginSuccess(profile))
+        dispatch(loginSuccess(profile))
+        return dispatch(fetchUser())
       })
+    })
+    lock.on('hide', function () {
+      console.warn('lock was hidden')
+      return dispatch(push('/'))
     })
   }
 }

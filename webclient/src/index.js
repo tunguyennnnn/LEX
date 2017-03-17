@@ -2,7 +2,6 @@ import 'babel-polyfill'
 import './styles/index.css'
 import './styles/videolist.css'
 import './styles/markerlist.css'
-import './styles/navbar.css'
 
 import React from 'react'
 import { render } from 'react-dom'

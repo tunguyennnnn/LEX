@@ -5,15 +5,13 @@ import { logout } from '../actions/auth'
 import { fetchUser } from '../actions/user'
 
 @connect((store) => ({
-  isAuthenticated: store.auth.isAuthenticated,
   profile: store.auth.profile
 }),
   { logout, fetchUser }
 )
 export default class Account extends React.Component {
   render () {
-    const { logout, isAuthenticated, profile, fetchUser } = this.props
-    console.log('isAuthenticated: ', isAuthenticated)
+    const { logout, profile, fetchUser } = this.props
     return (
       <div>
         <ul class='list-inline'>

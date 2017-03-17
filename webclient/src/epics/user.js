@@ -10,15 +10,16 @@ import 'rxjs/add/operator/mergeMap'
 export default action$ => {
   return action$.ofType(ActionTypes.FETCH_USER_REQUEST)
     .mergeMap((action) => {
-      console.log('action', action)
       let request = {
-        url: '/api/auth',
+        url: '/api/users',
         crossDomain: true,
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('id_token')}`
         }
       }
       return ajax(request)
-        .map(() => fetchedUser())
+        .do((resp) => console.log('resp: ', resp))
+        .map((resp) => resp.response)
+        .map(fetchedUser)
     })
 }

@@ -1,12 +1,13 @@
 import { UserAuthWrapper } from 'redux-auth-wrapper'
-import { routerActions, replace } from 'react-router-redux'
+import { replace } from 'react-router-redux'
+import { login } from '../actions/auth'
 
 const UserIsAuthenticated = UserAuthWrapper({
   authSelector: state => state.auth,
   authenticatingSelector: state => state.auth.isAuthenticated,
   predicate: auth => auth.isAuthenticated,
-  failureRedirectPath: '/login',
-  redirectAction: routerActions.replace,
+  failureRedirectPath: (state, ownProps) => '/',
+  redirectAction: login,
   wrapperDisplayName: 'UserIsAuthenticated'
 })
 

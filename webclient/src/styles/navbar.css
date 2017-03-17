@@ -109,6 +109,7 @@
 .navbar>.list>.navbar-item.-link:focus {
     color: #333;
     border-bottom-color: rgb(0, 188, 212);
+    cursor: pointer;
 }
 
 .navbar-avatar {
