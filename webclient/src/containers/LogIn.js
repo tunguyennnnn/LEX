@@ -1,41 +1,25 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { login, authentificate, logout } from '../actions/auth'
-import Auth from '../components/Auth'
+import { login, authenticate } from '../actions/auth'
 
 @connect((store) => ({
-  isAuthenticated: store.auth.isAuthenticated,
-  profile: store.auth.profile
+  isAuthenticated: store.auth.isAuthenticated
 }),
-  { login, authentificate, logout }
+  { login, authenticate }
 )
-export default class LogIn extends React.Component {
+export default class Login extends React.Component {
   constructor (props) {
     super(props)
-    this.handleLoginClick = this.handleLoginClick.bind(this)
-    this.handleLogoutClick = this.handleLogoutClick.bind(this)
-    this.props.authentificate()
-  }
-
-  handleLoginClick () {
-    this.props.login()
-  }
-
-  handleLogoutClick () {
-    this.props.logout()
+    this.props.authenticate()
   }
 
   render () {
-    const { isAuthenticated, profile } = this.props
-
+    const { login } = this.props
     return (
-      <Auth
-        isAuthenticated={isAuthenticated}
-        profile={profile}
-        onLoginClick={this.handleLoginClick}
-        onLogoutClick={this.handleLogoutClick}
-      />
+      <div>
+        <button onClick={login}>Login</button>
+      </div>
     )
   }
 }

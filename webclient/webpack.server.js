@@ -8,6 +8,12 @@ new WebpackDevServer(webpack(config), {
   historyApiFallback: true,
   quiet: false,
   noInfo: false,
+  proxy: {
+    '/api': {
+      target: 'http://localhost:4000',
+      secure: false
+    }
+  },
   stats: {
     // assets: false,
     colors: true,

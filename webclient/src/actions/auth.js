@@ -1,4 +1,6 @@
-/* global localStorage Auth0Lock */
+/* global localStorage */
+import Auth0Lock from 'auth0-lock'
+
 import * as ActionTypes from '../ActionTypes'
 
 const lock = new Auth0Lock('nvLJm1LMmmocO3YFIj4OWVmqkOI9kzuM', 'saneod.auth0.com')
@@ -38,7 +40,7 @@ export function logout () {
   }
 }
 
-export function authentificate () {
+export function authenticate () {
   return dispatch => {
     lock.on('authenticated', function (authResult) {
       lock.getProfile(authResult.idToken, function (error, profile) {
