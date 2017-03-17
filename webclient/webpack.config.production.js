@@ -1,21 +1,22 @@
-var webpack = require('webpack')
+const path = require('path')
+const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { resolve } = require('path')
 
 module.exports = {
-  entry: [
-    'react-hot-loader/patch',
-    'babel-polyfill',
-    'webpack-dev-server/client?http://localhost:8001',
-    'webpack/hot/only-dev-server',
-    './src/index'
-  ],
+  entry: {
+    lex: [
+      'babel-polyfill',
+      './src/index'
+    ]
+  },
   output: {
     path: resolve(__dirname, 'dist'),
     publicPath: '/',
-    filename: '[name].[hash].js'
+    filename: '[name].[hash].js',
+    chunkFilename: '[name].[chunkhash].js'
   },
-  devtool: 'eval',
+  devtool: 'cheap-module-source-map',
   module: {
     loaders: [{
       test: /\.js.*$/,
@@ -55,13 +56,23 @@ module.exports = {
     }]
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
     new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(true),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    }),
     new HtmlWebpackPlugin({
       hash: false,
       filename: 'index.html',
       template: './index.ejs',
-      title: `LEX (dev)`
+      title: `LEX (production)`
     })
   ]
 }
