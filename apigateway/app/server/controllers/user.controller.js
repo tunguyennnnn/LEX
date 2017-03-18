@@ -3,29 +3,35 @@ const app = require('../../config/express')
 const mongoose = require('mongoose')
 const APIError = require('../helpers/APIError')
 const httpStatus = require('http-status')
+mongoose.Promise = require('bluebird');
 
 function userProfile (req, res, next) {
-  console.log(req.user)
-  console.log('user id is:', req.user.sub)
+  const {sub, email=''} = req.user;
+  if (sub){
+    User.findOne({userId: sub})
+      .then(function(user){
+        if (user){
+          res.status(200).json(user)
+        }
+        else{
 
-  // TODO
-  // if req.user.sub in db
-    // return user schema using status: httpStatus.OK
-  // else
-    // return create new user and return it using status: httpStatus.CREATED
-  //
-  res.status(httpStatus.CREATED).json({
-    favourites: [{id: 'q11afdjs1', title: 'hello world'}, {id: 'asdffdjs1', title: 'go world'}],
-    bookmarks: [{id: 'q11afdjs1', timestamp: 1234432}],
-    history: [{id: 'q11afdjs1', title: 'hello world'}]
-  })
-
-  // User.findOne({id: req.user.sub})
-  //   .then(function(user){
-  //   })
-  //   .catch(function(err){
-  //     res.status(500)
-  //   })
+          const newUser = new User({
+            userId: sub,
+            email: email
+          })
+          return newUser.save()
+            .then(function(user){
+              res.status(202).json(user)
+            })
+        }
+      })
+      .catch(function(err){
+        res.status(500).send()
+      })
+  }
+  else{
+    res.status(404).send()
+  }
 }
 
 function userProfileUpdate (req, res, next) {
