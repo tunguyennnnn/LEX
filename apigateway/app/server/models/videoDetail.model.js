@@ -11,6 +11,15 @@ const VideoDetailSchema = new mongoose.Schema({
     required: true
   },
   title: String,
+  duration: {
+    type: Number,
+    default: 0,
+    required: true
+  },
+  thumbnail:{
+    type: String,
+    default: 'http://az616578.vo.msecnd.net/files/2016/11/13/6361460020890849442046786068_beautiful-08.jpg'
+  },
   words_with_time: [{word: String,
                   time: {start_time: Number, stop_time: Number}
                   }],

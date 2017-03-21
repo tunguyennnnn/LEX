@@ -15,12 +15,19 @@ const VideoInfoSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-
   words_with_time: [{word: String,
                   time: [{start_time: Number, stop_time: Number}]
                   }],
   title: String,
-
+  duration: {
+    type: Number,
+    default: 0,
+    required: true
+  },
+  thumbnail:{
+    type: String,
+    default: 'http://az616578.vo.msecnd.net/files/2016/11/13/6361460020890849442046786068_beautiful-08.jpg'
+  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -100,7 +107,9 @@ VideoInfoSchema.statics = {
         });
     }
     else{
-      return this.find()
+      return this.find({},
+        {words_with_time: 0, createdAt: 0}
+      )
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
