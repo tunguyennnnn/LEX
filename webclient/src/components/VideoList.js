@@ -5,12 +5,15 @@ import VideoListItem from './VideoListItem'
 export default class VideoList extends React.Component {
   render () {
     const { videos, listName } = this.props
-
+    console.log(this.props)
+    console.log(videos)
+    console.log(listName)
     const videoListItems = videos.map((v, i) =>
       <VideoListItem
         key={i}
-        id={v.id}
-        thumbnailUrl={v.thumbnailUrl}
+        _id = {v._id}
+        id={v.video_id}
+        thumbnailUrl={v.thumbnail}
         title={v.title}
         duration={v.duration} />
     )
