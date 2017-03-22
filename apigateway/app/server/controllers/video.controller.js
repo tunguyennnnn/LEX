@@ -1,5 +1,7 @@
 const VideoInfo = require('../models/videoInfo.model')
 const mongoose = require('mongoose')
+
+const logger = require('../../config/winston')
 /**
  * Get video list.
  * @property {number} req.query.skip - Number of videos to be skipped.
@@ -34,9 +36,8 @@ function list (req, res, next) {
 }
 
 function postVideo (req, res, next) {
-  console.log(req.body)
   VideoInfo.find({}, (err, data) => {
-    if (err) console.error(err)
+    if (err) logger.error(err)
     res.json({message: data})
   })
 }
@@ -50,7 +51,10 @@ function videoSearch (req, res, next) {
       .then(videoInfo => {
         res.json(videoInfo)
       })
-      .catch(e => res.json(e))
+      .catch((err) => {
+        logger.error(err)
+        res.status(500).send()
+      })
     } else {
       VideoInfo.get(id)
       .then(video => {
@@ -60,7 +64,10 @@ function videoSearch (req, res, next) {
           res.status(404).json({success: false, message: 'Invalid video id'})
         }
       })
-      .catch(video => res.status(404))
+      .catch(err => {
+        logger.error(err)
+        res.status(404)
+      })
     }
   } else {
     res.status(404).json({success: false, message: 'Invalid video id'})
