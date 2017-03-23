@@ -49,7 +49,7 @@ function videoSearch (req, res, next) {
     if (q) {
       VideoInfo.searchInVideo({id, q})
       .then(videoInfo => {
-        res.json(videoInfo)
+        res.status(200).json(videoInfo)
       })
       .catch((err) => {
         logger.error(err)
