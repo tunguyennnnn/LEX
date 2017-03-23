@@ -24,7 +24,7 @@ export default class VideoListItem extends React.Component {
           </div>
           <h3 class='video-list-item-title'>{title}</h3>
           <div class='video-list-item-meta'>
-            <div class='video-list-item-duration'>{formatTime(duration)}</div>
+            <div class='video-list-item-duration'>{formatTime(duration, true)}</div>
           </div>
         </Link>
       </li>

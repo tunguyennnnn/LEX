@@ -15,7 +15,7 @@ module.exports = {
     publicPath: '/',
     filename: '[name].[hash].js'
   },
-  devtool: 'eval',
+  devtool: 'source-map',
   module: {
     loaders: [{
       test: /\.js.*$/,

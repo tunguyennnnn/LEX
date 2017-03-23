@@ -30,7 +30,7 @@ export default function searchMarkers (action$) {
     text: ':)'
   } ]
 
-  return action$.ofType(ActionTypes.SEARCHED_MARKERS)
+  return action$.ofType(ActionTypes.FETCH_MARKERS_REQUEST)
     .map(action => action.payload.query)
     .filter(q => !!q)
     .switchMap(q =>

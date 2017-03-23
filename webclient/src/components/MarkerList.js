@@ -7,9 +7,9 @@ import {formatTime} from '../utils/time'
 
 export default class MarkerList extends React.Component {
   render () {
-    const { markers, seekTo } = this.props
+    const { markerSearch, seekTo } = this.props
 
-    const mappedMarkers = markers.map((marker, i) => {
+    const mappedMarkers = markerSearch.markers.map((marker, i) => {
       return (
         <span onTouchTap={() => seekTo(marker.time)} key={i}>
           <ListItem

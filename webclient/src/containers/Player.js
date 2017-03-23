@@ -1,16 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { searchMarkers, clearMarkersResults, receiveMarkers } from '../actions/markerSearch'
+import { searchMarkers, clearMarkersResults } from '../actions/markerSearch'
 
 import SearchMarker from './SearchMarker'
 import VideoPlayer from '../components/VideoPlayer'
 
 @connect((store) => ({
-  markers: store.markerResults,
-  markerSearchLoading: store.markerSearch
+  markerSearch: store.markerSearch
 }),
-  { searchMarkers, clearMarkersResults, receiveMarkers }
+  { searchMarkers, clearMarkersResults }
 )
 export default class Player extends React.Component {
   constructor (props) {
@@ -41,7 +40,8 @@ export default class Player extends React.Component {
   }
 
   render () {
-    const { markers, markerSearchLoading, params } = this.props
+    console.log(this.props)
+    const { markerSearch, params } = this.props
     const { videoId } = params
 
     return (
@@ -51,10 +51,9 @@ export default class Player extends React.Component {
           onReady={this.handlePlayerReady}
         />
         <SearchMarker
-          markers={markers}
-          loading={markerSearchLoading}
+          markerSearch={markerSearch}
           seekTo={this.handleSeekTo}
-          searchMarkers={this.handleMarkerSearch}
+          search={this.handleMarkerSearch}
           clearMarkers={this.handleMarkerClear}
          />
       </div>

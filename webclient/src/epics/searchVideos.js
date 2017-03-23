@@ -6,15 +6,15 @@ import { ajax } from 'rxjs/observable/dom/ajax'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/timer'
-import 'rxjs/add/operator/do'
 import 'rxjs/add/operator/filter'
 import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/mergeMap'
 import 'rxjs/add/operator/switchMap'
 import 'rxjs/add/operator/takeUntil'
 
 export default function searchVideos (action$) {
-  return action$.ofType(ActionTypes.SEARCHED_VIDEOS)
+  return action$.ofType(ActionTypes.FETCH_VIDEOS_REQUEST)
     .map(action => action.payload.query)
     .filter(q => {
       return !!q
@@ -32,7 +32,14 @@ export default function searchVideos (action$) {
           }
           return ajax(request)
             .map(v => v.response)
-            .map(receiveVideos)
+            .map(response => receiveVideos(response))
+            .catch(error => Observable.of({
+              type: ActionTypes.FETCH_USER_REJECTED,
+              payload: {
+                status: error.xhr.status,
+                response: error.xhr.response
+              }
+            }))
         })
     )
 };

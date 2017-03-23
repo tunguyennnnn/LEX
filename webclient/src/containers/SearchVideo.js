@@ -7,8 +7,7 @@ import VideoSearchInput from '../components/VideoSearchInput'
 import VideoList from '../components/VideoList'
 
 @connect((store) => ({
-  videos: store.videoResults,
-  videoSearchLoading: store.videoSearch
+  videoSearch: store.videoSearch
 }),
   { searchVideos }
 )
@@ -24,7 +23,7 @@ export default class SearchVideo extends React.Component {
 
   render () {
     console.log(this.props)
-    const { videos, videoSearchLoading } = this.props
+    const { videoSearch } = this.props
 
     const listName = 'Recents'
 
@@ -32,7 +31,7 @@ export default class SearchVideo extends React.Component {
       <div>
         <VideoSearchInput
           onChange={this.handleVideoSearch} />
-        <VideoList loading={videoSearchLoading} videos={videos} listName={listName} />
+        <VideoList videoSearch={videoSearch} listName={listName} />
       </div>
     )
   }

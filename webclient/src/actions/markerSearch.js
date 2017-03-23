@@ -2,7 +2,7 @@ import * as ActionTypes from '../ActionTypes'
 
 export function receiveMarkers (markers) {
   return {
-    type: ActionTypes.RECEIVED_MARKERS,
+    type: ActionTypes.FETCH_MARKERS_SUCCESS,
     payload: {
       markers
     }
@@ -11,7 +11,7 @@ export function receiveMarkers (markers) {
 
 export function searchMarkers (query) {
   return {
-    type: ActionTypes.SEARCHED_MARKERS,
+    type: ActionTypes.FETCH_MARKERS_REQUEST,
     payload: {
       query
     }
