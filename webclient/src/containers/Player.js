@@ -22,7 +22,7 @@ export default class Player extends React.Component {
   }
 
   handleMarkerSearch (query) {
-    this.props.searchMarkers(query)
+    this.props.searchMarkers({query: query, videoId: this.props.params.videoId})
   }
 
   handlerMarkerClear () {
