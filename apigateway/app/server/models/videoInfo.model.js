@@ -4,7 +4,7 @@ const httpStatus = require('http-status');
 const APIError = require('../helpers/APIError');
 const VideoDetail = require('./videoDetail.model');
 const lemmatize = Promise.promisify(require('lemmer').lemmatize);
-
+const videoRanking = require('../helpers/videoRanking');
 //make connection:
 
 /**

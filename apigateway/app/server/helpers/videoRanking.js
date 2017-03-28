@@ -10,7 +10,7 @@ function normalizeScores(scores, smallIsBetter){
   const vsmall = 0.000001; //avoid zero vision
   let normalizedScores = {};
   if (smallIsBetter){
-    let minScore = Max.min.apply(this, _.values(scores));
+    let minScore = Math.min.apply(this, _.values(scores));
     _.each(scores, function(val, key){
       normalizedScores[key] = minScore/Math.max(val, vsmall)
     })
@@ -26,37 +26,52 @@ function normalizeScores(scores, smallIsBetter){
 }
 
 
+function constructAndGiveScore(arrayOfObjects){
+  let constructedObjects = _.reduce(arrayOfObjects, function(acc, item){
+    acc[item[0]] = item[1];
+    return acc;
+  }, {});
+  return normalizeScores(constructedObjects)
+}
+
 function matchedWordsScore(searchResults){
   return Promise.map(searchResults, function(video){
-    return [video._id._id, video.timeStamps.length]
+    return [video._id, video.timeStamps.length]
   })
   .then(function(arrayOfObjects){
-    return _.reduce(arrayOfObjects, function(acc, item){
-      acc[item[0]] = item[1];
-      return acc
-    }, {});
-  })
-  .then(function(scores){
-    return normalizeScores(scores)
+    return constructAndGiveScore(arrayOfObjects)
   })
 }
 
 function wordsFrequencyScore(searchedResults){
   return Promise.map(searchedResults, function(video){
-    return [video._id._id,
+    return [video._id,
             _.reduce(video.timeStamps, function(acc, item){
 
               acc += item.time.length;
               return acc}, 0)]
   })
   .then(function(arrayOfObjects){
-    return _.reduce(arrayOfObjects, function(acc, item){
-      acc[item[0]] = item[1];
-      return acc
-    }, {});
-  })
-  .then(function(scores){
-    return normalizeScores(scores)
+    return constructAndGiveScore(arrayOfObjects)
   })
 }
-module.exports = {matchedWordsScore, wordsFrequencyScore};
+
+function wordDistanceScore(searchedResults){
+
+}
+
+function wordLocationScore(searchedResults){
+  return Promise.map(searchedResults, function(video){
+    let startTimes = video.timeStamps.map(function(wwt){
+      return wwt.time[0].start_time;
+    });
+    return [video._id,
+            startTimes.reduce(function(a,b){
+              return a+b;
+            },0)/startTimes.length]
+  })
+  .then(function(arrayOfObjects){
+    return constructAndGiveScore(arrayOfObjects)
+  })
+}
+module.exports = {matchedWordsScore, wordsFrequencyScore, wordLocationScore};
