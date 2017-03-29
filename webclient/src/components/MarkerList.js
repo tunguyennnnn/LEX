@@ -7,18 +7,17 @@ import {formatTime} from '../utils/time'
 
 export default class MarkerList extends React.Component {
   render () {
-    const { markerSearch, seekTo } = this.props
-
+    const { markerSearch, seekTo } = this.props;
     const mappedMarkers = markerSearch.markers.map((marker, i) => {
+      let {context, words} = marker;
+      let timeStamps = words.map(word => word.time);
       return (
-        <span onTouchTap={() => seekTo(marker.time)} key={i}>
+        <span onTouchTap={() => seekTo(timeStamps[0])} key={i}>
           <ListItem
-            primaryText={<div class='marker-time'>{formatTime(marker.time)}</div>}
+            primaryText={<div class='marker-time'>{formatTime(timeStamps[0])}</div>}
             secondaryText={
               <p>
-                This is the text context where
-                <span style={{color: darkBlack}}> {marker.text} </span>
-                appears in.
+                {context}
               </p>
             }
             secondaryTextLines={2}
@@ -26,9 +25,6 @@ export default class MarkerList extends React.Component {
           <Divider />
         </span>
       )
-        // .reduce((accu, elem) => {
-        // return accu === null ? [elem] : [...accu, <Divider inset />, elem]
-      // }, null)
     })
 
     return (

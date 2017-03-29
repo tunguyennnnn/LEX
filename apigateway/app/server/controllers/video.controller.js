@@ -43,34 +43,30 @@ function postVideo (req, res, next) {
 }
 
 function videoSearch (req, res, next) {
-  let id = req.params.video_id
-  if (mongoose.Types.ObjectId.isValid(id)) {
-    let q = req.query.q
-    if (q) {
-      VideoInfo.searchInVideo({id, q})
-      .then(videoInfo => {
-        res.status(200).json(videoInfo)
-      })
-      .catch((err) => {
-        logger.error(err)
-        res.status(500).send()
-      })
-    } else {
-      VideoInfo.get(id)
-      .then(video => {
-        if (video) {
-          res.status(200).json(video)
-        } else {
-          res.status(404).json({success: false, message: 'Invalid video id'})
-        }
-      })
-      .catch(err => {
-        logger.error(err)
-        res.status(404)
-      })
-    }
+  let id = req.params.video_id;
+  let q = req.query.q
+  if (q) {
+    VideoInfo.searchInVideo({id, q})
+    .then(videoInfo => {
+      res.status(200).json(videoInfo)
+    })
+    .catch((err) => {
+      logger.error(err)
+      res.status(500).send()
+    })
   } else {
-    res.status(404).json({success: false, message: 'Invalid video id'})
+    VideoInfo.get(id)
+    .then(video => {
+      if (video) {
+        res.status(200).json(video)
+      } else {
+        res.status(404).json({success: false, message: 'Invalid video id'})
+      }
+    })
+    .catch(err => {
+      logger.error(err)
+      res.status(404)
+    })
   }
 }
 

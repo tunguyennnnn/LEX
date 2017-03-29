@@ -93,11 +93,7 @@ class TextProcessing:
 			time = twt["time"]
 			contraction_keys = Cont.keys()
 			if word in contraction_keys:
-				new_words = Cont[word][0].split(" ")
-				for new_word in new_words:
-					# compressed_twt.setdefault(new_word, [])
-					# compressed_twt[new_word].append(time)
-					self.uncompressed_twt.append({"word": new_word, "original_word": word, "time": time})
+				self.uncompressed_twt.append({"word": word, "original_word": word, "time": time})
 			else:
 				tag = Pos_tag([word])[0][1] #-> Pos_tag(["geese"]) -> [("geese", "NN")]
 				pos_type = "n" #default lemmatize to a nounce

@@ -62,7 +62,7 @@ VideoInfoSchema.statics = {
     return lemmatize(words)
       .then(function(lemWords){
         return that.aggregate(
-          {$match: {_id: (new mongoose.Types.ObjectId(id))}},
+          {$match: {video_id: id}},
           {$unwind: '$words_with_time'},
           {$match: {'words_with_time.word': {$in: lemWords}}},
           {$group: {_id: '$video_id', timeStamps: {$push: '$words_with_time'}}}
