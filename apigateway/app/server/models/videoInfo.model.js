@@ -5,6 +5,7 @@ const APIError = require('../helpers/APIError');
 const VideoDetail = require('./videoDetail.model');
 const lemmatize = Promise.promisify(require('lemmer').lemmatize);
 const videoRanking = require('../helpers/videoRanking');
+const _ = require('lodash')
 //make connection:
 
 /**
@@ -98,12 +99,22 @@ VideoInfoSchema.statics = {
             {$group: {_id: '$video_id', timeStamps: {$push: '$words_with_time'}}}
           )
           .then(function(videos){
-            return Promise.map(videos, function(video){
-              let videoId = video._id;
-              let timeStamps = video.timeStamps;
-              return VideoDetail.search({videoId, timeStamps, lemWords});
+            return videoRanking.giveScores(videos)
+              .then(function(scores){
+                return Promise.filter(videos, function(video){
+                  video.score = scores[video._id]
+                  return scores[video._id]
+                })
+              })
+          })
+          .then(function(videos){
+            return Promise.map(_.sortBy(videos, 'score'), function(video){
+                let videoId = video._id;
+                let timeStamps = video.timeStamps;
+                return VideoDetail.search({videoId, timeStamps, lemWords});
             })
-          });
+          })
+
         });
     }
     else{

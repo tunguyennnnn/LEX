@@ -76,12 +76,13 @@ VideoDetailSchema.statics = {
       {$match: {'video_id': videoId}},
       {$unwind: '$words_with_time'},
       {$match: filterCondition},
-      {$group: {_id: {_id: "$_id", title: '$title', videoId: '$video_id'}, list: {$push: '$words_with_time'}}}
+      {$group: {_id: {_id: "$_id", thumbnail: '$thumbnail', duration: '$duration', title: '$title', videoId: '$video_id'}, list: {$push: '$words_with_time'}}},
     ])
     .then(function(videos){
       let video = videos[0];
-      video.list = groupWords(video.list, lemWords);
-      return video;
+      let list = groupWords(video.list, lemWords);
+      let {_id, title, thumbnail, duration, videoId} = video._id;
+      return {_id, title, thumbnail, duration, videoId, list}
     })
   }
 }
