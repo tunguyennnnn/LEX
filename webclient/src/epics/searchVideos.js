@@ -24,7 +24,7 @@ export default function searchVideos (action$) {
         .takeUntil(action$.ofType(ActionTypes.CLEARED_VIDEOS_RESULTS))
         .mergeMap(() => {
           let request = {
-            url: '/api/videos',
+            url: `/api/videos?q=${q}`,
             crossDomain: true,
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('id_token')}`
