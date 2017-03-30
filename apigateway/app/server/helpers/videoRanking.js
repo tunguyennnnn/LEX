@@ -26,12 +26,12 @@ function normalizeScores(scores, smallIsBetter){
 }
 
 
-function constructAndGiveScore(arrayOfObjects){
+function constructAndGiveScore(arrayOfObjects, smallIsBetter){
   let constructedObjects = _.reduce(arrayOfObjects, function(acc, item){
     acc[item[0]] = item[1];
     return acc;
   }, {});
-  return normalizeScores(constructedObjects)
+  return normalizeScores(constructedObjects, smallIsBetter)
 }
 
 function matchedWordsScore(searchResults){
@@ -71,7 +71,30 @@ function wordLocationScore(searchedResults){
             },0)/startTimes.length]
   })
   .then(function(arrayOfObjects){
-    return constructAndGiveScore(arrayOfObjects)
+    return constructAndGiveScore(arrayOfObjects, true)
   })
 }
-module.exports = {matchedWordsScore, wordsFrequencyScore, wordLocationScore};
+
+
+function giveScores(searchedResults){
+  return wordLocationScore(searchedResults)
+    .then(function(locationScore){
+      return wordsFrequencyScore(searchedResults)
+        .then(function(frequencyScore){
+          return matchedWordsScore(searchedResults)
+            .then(function(wordCount){
+              return Promise.map(searchedResults, function(video){
+                return [video._id, frequencyScore[video._id] + 1.5*locationScore[video._id] + 2*wordCount[video._id]]
+              })
+            })
+        })
+    })
+    .then(function(scoreArray){
+      return _.reduce(scoreArray, function(acc, item){
+        acc[item[0]] = item[1];
+        return acc;
+      }, {});
+    })
+}
+
+module.exports = {giveScores};
