@@ -1,7 +1,7 @@
 import * as ActionTypes from '../ActionTypes'
 
 const initialState = {
-  videos: [],
+  user: null,
   fetching: false,
   fetched: false,
   error: null
@@ -9,29 +9,23 @@ const initialState = {
 
 export default function reducer (state = initialState, action) {
   switch (action.type) {
-    case ActionTypes.FETCH_VIDEOS_REQUEST:
+    case ActionTypes.FETCH_USER_REQUEST:
       return {
         ...state,
         fetching: true
       }
-    case ActionTypes.FETCH_VIDEOS_SUCCESS:
+    case ActionTypes.FETCH_USER_SUCCESS:
       return {
         ...state,
-        videos: action.payload.videos,
         fetching: false,
-        fetched: true
+        fetched: true,
+        user: action.payload.user
       }
-    case ActionTypes.FETCH_VIDEOS_REJECTED:
+    case ActionTypes.FETCH_USER_REJECTED:
       return {
         ...state,
         fetching: false,
         error: action.payload
-      }
-    case ActionTypes.CLEARED_VIDEOS_RESULTS:
-      return {
-        ...state,
-        videos: [],
-        fetching: false
       }
     default:
       return state

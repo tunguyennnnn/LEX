@@ -1,14 +1,11 @@
-const express = require('express');
-const UserController = require('../controllers/user.controller');
-const router = express.Router();
+const express = require('express')
+const UserController = require('../controllers/user.controller')
+const router = express.Router()
+const authCheck = require('../../config/auth')
 
 router.route('/')
-  .get(UserController.getUsers)
-  .post(UserController.createUser)
-
-router.route('/:user_id')
+  .all(authCheck)
   .get(UserController.userProfile)
-  .put(UserController.updateUser)
+  .put(UserController.userProfileUpdate)
 
-
-module.exports = router;
+module.exports = router

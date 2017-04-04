@@ -2,7 +2,7 @@ import * as ActionTypes from '../ActionTypes'
 
 export function receiveVideos (videos) {
   return {
-    type: ActionTypes.RECEIVED_VIDEOS,
+    type: ActionTypes.FETCH_VIDEOS_SUCCESS,
     payload: {
       videos
     }
@@ -11,7 +11,7 @@ export function receiveVideos (videos) {
 
 export function searchVideos (query) {
   return {
-    type: ActionTypes.SEARCHED_VIDEOS,
+    type: ActionTypes.FETCH_VIDEOS_REQUEST,
     payload: {
       query
     }

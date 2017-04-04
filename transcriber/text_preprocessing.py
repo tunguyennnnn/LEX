@@ -9,7 +9,7 @@ import re
 
 
 
-Client = MongoClient(os.environ.get("REMOTE_MONGO"))
+Client = MongoClient("mongodb://lex:sjMl7MdpaX9XdeBU@lex-shard-00-00-fv6o5.mongodb.net:27017,lex-shard-00-01-fv6o5.mongodb.net:27017,lex-shard-00-02-fv6o5.mongodb.net:27017/videostext?ssl=true&replicaSet=lex-shard-0&authSource=admin")
 VideosTextDb = Client.videostext
 CompressedTWTCollection = VideosTextDb.compressedTWT
 VideoInfoCollection = VideosTextDb.text_with_time
@@ -27,13 +27,15 @@ class TextProcessing:
 			- stopwords
 			- lemmatize words
 	'''
-	def __init__(self, video_id, video_title, text_with_time = {}, full_transcript = "", db_name = 'videostext', collection='text_with_time'):
+	def __init__(self, video_id, video_title, duration = 0, thumbnail_link = "", text_with_time = {}, full_transcript = "", db_name = 'videostext', collection='text_with_time'):
 		self.title = video_title
 		self.video_id = video_id
 		self.db_name = db_name
 		self.collection = collection
 		self.text_with_time = text_with_time  #format follows what Watson returns
 		self.full_transcript = full_transcript
+		self.thumbnail_link = thumbnail_link
+		self.duration = int(duration)
 
 	def read_f_transcript(self, file_path):
 		with open(file_path) as transcript_file:
@@ -91,11 +93,7 @@ class TextProcessing:
 			time = twt["time"]
 			contraction_keys = Cont.keys()
 			if word in contraction_keys:
-				new_words = Cont[word][0].split(" ")
-				for new_word in new_words:
-					# compressed_twt.setdefault(new_word, [])
-					# compressed_twt[new_word].append(time)
-					self.uncompressed_twt.append({"word": new_word, "original_word": word, "time": time})
+				self.uncompressed_twt.append({"word": word, "original_word": word, "time": time})
 			else:
 				tag = Pos_tag([word])[0][1] #-> Pos_tag(["geese"]) -> [("geese", "NN")]
 				pos_type = "n" #default lemmatize to a nounce
@@ -132,9 +130,13 @@ class TextProcessing:
 	def construct_basic_data(self):
 		return ({"video_id": self.video_id,
 				"title": self.title,
+				"thumbnail": self.thumbnail_link,
+				"duration" : self.duration,
 				"words_with_time": self.compressed_twt},
 				{"video_id": self.video_id,
 				"title": self.title,
+				"duration": self.duration,
+				"thumbnail": self.thumbnail_link,
 				"words_with_time": self.uncompressed_twt,
 				"raw_transcript": self.full_transcript,
 				"processed_transcript": self.modified_transcript})

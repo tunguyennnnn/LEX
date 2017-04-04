@@ -2,6 +2,8 @@ import React from 'react'
 
 import { Link } from 'react-router'
 
+import {formatTime} from '../utils/time'
+
 export default class VideoListItem extends React.Component {
   render () {
     const { id, thumbnailUrl, title, duration } = this.props
@@ -22,7 +24,7 @@ export default class VideoListItem extends React.Component {
           </div>
           <h3 class='video-list-item-title'>{title}</h3>
           <div class='video-list-item-meta'>
-            <div class='video-list-item-duration'>{duration}s</div>
+            <div class='video-list-item-duration'>{formatTime(duration, true)}</div>
           </div>
         </Link>
       </li>

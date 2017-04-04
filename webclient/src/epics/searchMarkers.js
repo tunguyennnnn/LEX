@@ -2,7 +2,7 @@ import * as ActionTypes from '../ActionTypes'
 import { receiveMarkers } from '../actions/markerSearch'
 
 import { Observable } from 'rxjs/Observable'
-// import { ajax } from 'rxjs/observable/dom/ajax'
+import { ajax } from 'rxjs/observable/dom/ajax'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/timer'
 import 'rxjs/add/operator/do'
@@ -30,16 +30,25 @@ export default function searchMarkers (action$) {
     text: ':)'
   } ]
 
-  return action$.ofType(ActionTypes.SEARCHED_MARKERS)
+  return action$.ofType(ActionTypes.FETCH_MARKERS_REQUEST)
     .map(action => action.payload.query)
     .filter(q => !!q)
     .switchMap(q =>
       Observable.timer(800) // debounce
         .takeUntil(action$.ofType(ActionTypes.CLEARED_MARKERS_RESULTS))
         .do(() => console.info(`Performing query: "${q}"`))
-        .mergeMap(() =>
-          Observable.of(markers)
+        .mergeMap(() => {
+          console.log(q)
+          let request = {
+            url: `/api/videos/${q.videoId}?q=${q.query}`,
+            crossDomain: true,
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('id_token')}`
+            }
+          }
+          return ajax(request)
+            .map(v => v.response.list || [])
             .map(receiveMarkers)
-        )
+        })
     )
 }

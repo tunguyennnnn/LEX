@@ -1,74 +1,30 @@
 import React, {Component} from 'react'
-import cx from 'classnames'
-import videojs from 'video.js'
-import 'videojs-youtube/dist/Youtube.js'
-import 'videojs-markers/dist/videojs-markers.js'
-import _ from 'lodash'
 
-const DEFAULT_VIDEO_OPTIONS = {
-  autoplay: true,
-  controls: true
-}
+import YouTube from 'react-youtube'
 
 export default class VideoPlayer extends Component {
-  constructor () {
-    super()
-    this.state = {
-      player: {}
-    }
-  }
-  componentDidMount () {
-    console.log('did mount')
-    const self = this
-    const options = _.defaults({}, this.props.options, DEFAULT_VIDEO_OPTIONS)
-    options.techOrder = ['youtube']
-    options.sources = [{type: 'video/youtube', 'src': this.props.src}]
-    const player = videojs('aVideo', options).ready(function () {
-      self.player = this
-      console.log('video ready')
-        // self.player.on('play', self.handlePlay);
-    })
-    player.markers({
-      markerStyle: {
-        width: '3px',
-        'background-color': 'red'
-      },
-      markerTip: {
-        display: true,
-        text: (marker) => marker.text
-      },
-      breakOverlay: {
-        display: false,
-        displayTime: 1,
-        text: (marker) => marker.text
-      },
-      markers: []
-    })
-  }
-
-  updateMarkers (markers) {
-    if (this.player) {
-      this.player.markers.reset(markers)
-    }
-  }
-
-  componentWillUnmount () {
-    this.player.dispose()
-    this.props.clearMarkers()
-  }
-
   componentDidUpdate () {
     console.log('componentDidUpdate')
-    this.updateMarkers(this.props.markers)
+    // this.updateMarkers(this.props.markers)
   }
 
   render () {
-    const videoPlayerClasses = cx({
-      'video-js': true,
-      'vjs-default-skin': true,
-      'vjs-fluid': true
-    })
+    const {src, onReady} = this.props
+    const opts = {
+      height: '390',
+      width: '640',
+      playerVars: { // https://developers.google.com/youtube/player_parameters
+        autoplay: 1
+      }
+    }
 
-    return <video id='aVideo' class={videoPlayerClasses} />
+    return (
+      <YouTube
+        videoId={src}
+        opts={opts}
+        onReady={onReady}
+      />
+    )
   }
+
 }
