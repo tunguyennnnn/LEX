@@ -1,7 +1,7 @@
-const Promise = require('bluebird');
-const mongoose = require('mongoose');
-const httpStatus = require('http-status');
-const APIError = require('../helpers/APIError');
+const Promise = require('bluebird')
+const mongoose = require('mongoose')
+const httpStatus = require('http-status')
+const APIError = require('../helpers/APIError')
 mongoose.Promise = Promise
 
 const UserSchemma = new mongoose.Schema({
@@ -9,32 +9,32 @@ const UserSchemma = new mongoose.Schema({
     type: String,
     required: true
   },
-    email: {type: String, default: ''},
-    history: {
-      type: [{
-        videoId: mongoose.Schema.Types.ObjectId,
-        watchedAt: {
-          type: Date,
-          default: Date.now
-        }
-      }],
-      default: []
-    },
-    bookmark: {
-      type: [{
-        videoId: mongoose.Schema.Types.ObjectId,
-        markedAt: {
-          type: Date,
-          default: Date.now
-        }
-      }],
-      default: []
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now
-    }
-}, {collection: 'User'});
+  email: {type: String, default: ''},
+  history: {
+    type: [{
+      videoId: mongoose.Schema.Types.ObjectId,
+      watchedAt: {
+        type: Date,
+        default: Date.now
+      }
+    }],
+    default: []
+  },
+  bookmark: {
+    type: [{
+      videoId: mongoose.Schema.Types.ObjectId,
+      markedAt: {
+        type: Date,
+        default: Date.now
+      }
+    }],
+    default: []
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+}, {collection: 'User'})
 
 UserSchemma.statics = {
   validationSchemma: {
@@ -47,5 +47,4 @@ UserSchemma.statics = {
   }
 }
 
-
-module.exports = mongoose.model('User', UserSchemma);
+module.exports = mongoose.model('User', UserSchemma)

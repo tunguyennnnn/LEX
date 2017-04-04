@@ -1,12 +1,12 @@
-const Promise = require('bluebird');
-const mongoose = require('mongoose');
-const httpStatus = require('http-status');
-const APIError = require('../helpers/APIError');
-const VideoDetail = require('./videoDetail.model');
-const lemmatize = Promise.promisify(require('lemmer').lemmatize);
-const videoRanking = require('../helpers/videoRanking');
+const Promise = require('bluebird')
+const mongoose = require('mongoose')
+const httpStatus = require('http-status')
+const APIError = require('../helpers/APIError')
+const VideoDetail = require('./videoDetail.model')
+const lemmatize = Promise.promisify(require('lemmer').lemmatize)
+const videoRanking = require('../helpers/videoRanking')
 const _ = require('lodash')
-//make connection:
+// make connection:
 
 /**
  * Video Info Schema
@@ -17,15 +17,15 @@ const VideoInfoSchema = new mongoose.Schema({
     required: true
   },
   words_with_time: [{word: String,
-                  time: [{start_time: Number, stop_time: Number}]
-                  }],
+    time: [{start_time: Number, stop_time: Number}]
+  }],
   title: String,
   duration: {
     type: Number,
     default: 0,
     required: true
   },
-  thumbnail:{
+  thumbnail: {
     type: String,
     default: 'http://az616578.vo.msecnd.net/files/2016/11/13/6361460020890849442046786068_beautiful-08.jpg'
   },
@@ -33,8 +33,7 @@ const VideoInfoSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
-}, { collection: 'compressedTWT' });
-
+}, { collection: 'compressedTWT' })
 
 /**
  * Statics : methods defined on the Model
@@ -52,32 +51,29 @@ VideoInfoSchema.statics = {
         if (video) {
           return video
         }
-      });
-
-
+      })
   },
 
-  searchInVideo({id, q}){
-    let words = q.split(' ');
-    let that = this;
+  searchInVideo ({id, q}) {
+    let words = q.split(' ')
+    let that = this // WHY????? you would not need `that` if you use arrow function!
     return lemmatize(words)
-      .then(function(lemWords){
+      .then(function (lemWords) {
         return that.aggregate(
           {$match: {video_id: id}},
           {$unwind: '$words_with_time'},
           {$match: {'words_with_time.word': {$in: lemWords}}},
           {$group: {_id: '$video_id', timeStamps: {$push: '$words_with_time'}}}
         )
-        .then(function(videos){
-          if (videos.length > 0){
-            let videoId = videos[0]._id;
-            let timeStamps = videos[0].timeStamps;
-            return VideoDetail.search({videoId, timeStamps, lemWords});
+        .then(function (videos) {
+          if (videos.length > 0) {
+            let videoId = videos[0]._id
+            let timeStamps = videos[0].timeStamps
+            return VideoDetail.search({videoId, timeStamps, lemWords})
+          } else {
+            return {}
           }
-          else{
-            return {};
-          }
-        });
+        })
       })
   },
   /**
@@ -87,37 +83,35 @@ VideoInfoSchema.statics = {
    * @returns {Promise}
    */
   list ({ skip = 0, limit = 20, query = undefined } = {}) {
-    if (query && query !== ''){
+    if (query && query !== '') {
       let that = this
       let words = query.split(' ')
       return lemmatize(words)
-        .then(function(lemWords){
+        .then((lemWords) => {
           return that.aggregate(
-            {$match: {'words_with_time.word' : {$in: lemWords}}},
+            {$match: {'words_with_time.word': {$in: lemWords}}},
             {$unwind: '$words_with_time'},
-            {$match: {'words_with_time.word' : {$in: lemWords}}},
+            {$match: {'words_with_time.word': {$in: lemWords}}},
             {$group: {_id: '$video_id', timeStamps: {$push: '$words_with_time'}}}
           )
-          .then(function(videos){
+          .then((videos) => {
             return videoRanking.giveScores(videos)
-              .then(function(scores){
-                return Promise.filter(videos, function(video){
+              .then((scores) => {
+                return Promise.filter(videos, (video) => {
                   video.score = scores[video._id]
                   return scores[video._id]
                 })
               })
           })
-          .then(function(videos){
-            return Promise.map(_.sortBy(videos, 'score'), function(video){
-                let videoId = video._id;
-                let timeStamps = video.timeStamps;
-                return VideoDetail.search({videoId, timeStamps, lemWords});
+          .then((videos) => {
+            return Promise.map(_.sortBy(videos, 'score'), (video) => {
+              let videoId = video._id
+              let timeStamps = video.timeStamps
+              return VideoDetail.search({videoId, timeStamps, lemWords})
             })
           })
-
-        });
-    }
-    else{
+        })
+    } else {
       return this.find({},
         {words_with_time: 0, createdAt: 0}
       )

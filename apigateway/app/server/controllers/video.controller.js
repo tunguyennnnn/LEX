@@ -43,7 +43,7 @@ function postVideo (req, res, next) {
 }
 
 function videoSearch (req, res, next) {
-  let id = req.params.video_id;
+  let id = req.params.video_id
   let q = req.query.q
   if (q) {
     VideoInfo.searchInVideo({id, q})
