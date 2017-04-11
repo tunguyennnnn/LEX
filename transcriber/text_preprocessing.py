@@ -6,7 +6,7 @@ import os
 import json
 from contractions import contractions as Cont
 import re
-
+import summary as SM
 
 
 Client = MongoClient("mongodb://lex:sjMl7MdpaX9XdeBU@lex-shard-00-00-fv6o5.mongodb.net:27017,lex-shard-00-01-fv6o5.mongodb.net:27017,lex-shard-00-02-fv6o5.mongodb.net:27017/videostext?ssl=true&replicaSet=lex-shard-0&authSource=admin")
@@ -36,6 +36,7 @@ class TextProcessing:
 		self.full_transcript = full_transcript
 		self.thumbnail_link = thumbnail_link
 		self.duration = int(duration)
+		self.summarizer = SM.FrequencySummarizer()
 
 	def read_f_transcript(self, file_path):
 		with open(file_path) as transcript_file:
@@ -148,7 +149,6 @@ class TextProcessing:
 		processed_twt, basic_twt = self.construct_basic_data()
 		CompressedTWTCollection.insert(processed_twt)
 		VideoInfoCollection.insert(basic_twt)
-
 
 
 

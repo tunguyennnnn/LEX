@@ -1,1 +1,19 @@
-./recordings/test.opus
+./recordings/5rwuKH-zdos__javaScript Method chaining tutorial ( function chaining)__737.wav
+./recordings/71AtaJpJHw0__Javascript Closure tutorial ( Closures Explained )__771.wav
+./recordings/7oNWNlMrkpc__Javascript Prototype inheritance Explained  ( tutorial  Part1)__684.wav
+./recordings/7tGmS2SPxBo__Hoisting  in JavaScript and function scope issues with keyword var__826.wav
+./recordings/_pfXEv9cFGE__ES6 Arrow Functions in JavaScript tutorial ( Fat Arrow Function Expression es2015, ecma6)__664.wav
+./recordings/c0mLRpw-9rI__javaScript call apply and bind__923.wav
+./recordings/DpFDj-6iYoY__javaScript object oriented programming tutorial - Understanding Objects Part 1__2017.wav
+./recordings/eY7u388cvM4__Javascript Immediately Invoked Function Expression IIFE - Tutorial__498.wav
+./recordings/kGl0B9tqrlg__JavaScript spread operator and rest parameters tutorial ES6 _ ES2015__568.wav
+./recordings/oU3LzOO0OGA__JavaScript Currying function ( method ) explained  Tutorial__768.wav
+./recordings/pMK-jcOAYI8__javascript web workers tutorial (  introduction to multithreading in js )__539.wav
+./recordings/pTbSfCT42_M__javascript callback functions tutorial__940.wav
+./recordings/s6SH72uAn3Q__javaScript promises explained tutorial__790.wav
+./recordings/TJpkYvSREtM__JavaScript Generators Tutorial__705.wav
+./recordings/uCcxKp_HbKk__javascript tagged template strings in ES6 (new string functions tutorial )__819.wav
+./recordings/uIlj6_z_wL8__javascript prototype inheritance explained ( tutorial part-2)__743.wav
+./recordings/VtG0WAUvq2w__Recursion In JavaScript Tutorial__638.wav
+./recordings/xizFJHKHdHw__JavaScript object creation patterns tutorial - factory , constructor pattern, prototype pattern__1840.wav
+./recordings/ZNrJPzjNt-o__Javascript Iterators tutorial__527.wav

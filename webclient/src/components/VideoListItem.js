@@ -1,9 +1,7 @@
 import React from 'react'
 
 import { Link } from 'react-router'
-
 import {formatTime} from '../utils/time'
-
 export default class VideoListItem extends React.Component {
   render () {
     const { id, thumbnailUrl, title, duration } = this.props

@@ -11,7 +11,7 @@ export default class VideoList extends React.Component {
     const videoListItems = videoSearch.videos.map((v, i) =>
       <VideoListItem
         key={i}
-        _id = {v._id}
+        _id={v._id}
         id={v.video_id}
         thumbnailUrl={v.thumbnail}
         title={v.title}
