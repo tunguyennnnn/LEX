@@ -16,4 +16,5 @@ RUN sh nltk_download_packages.sh
 COPY . /usr/src/app
 
 # Run the Python command
+#TODO: Change to http server entry point when available
 CMD [ "python3", "fetcher.py", "dQw4w9WgXcQ" ]
