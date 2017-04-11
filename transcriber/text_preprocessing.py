@@ -134,7 +134,7 @@ class TextProcessing:
 				self.compressed_twt.append({"word": new_word, "orginal_word": word,"time": time})
 
 	def construct_basic_data(self):
-		summary = SM.FrequencySummarizer().summarize(self.full_transcript, int(len(self.full_transcripts.plit(".")) * 0.1))
+		summary = " ".join(SM.FrequencySummarizer().summarize(self.full_transcript, int(len(self.full_transcript.split(".")) * 0.1)))
 		return ({"video_id": self.video_id,
 				"title": self.title,
 				"thumbnail": self.thumbnail_link,
