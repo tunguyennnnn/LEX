@@ -1,27 +1,31 @@
-var Server = require('webpack-dev-server')
-var config = require('./webpack.config.js')
-var webpack = require('webpack')
-var _ = require('lodash')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
+const WebpackDevServer = require('webpack-dev-server')
+const config = require('./webpack.config')
 
-var devConfig = _.extend(config, {
-  watch: true,
-  port: 8080
-})
-
-devConfig.plugins.push(new HtmlWebpackPlugin({
-  title: 'lex',
-  template: 'dist/index.html',
-  inject: 'head'
-}))
-
-var compiler = webpack(devConfig)
-
-const webserver = new Server(compiler, {
+new WebpackDevServer(webpack(config), {
+  publicPath: '/',
+  hot: true,
   historyApiFallback: true,
-  stats: {colors: true}
+  quiet: false,
+  noInfo: false,
+  proxy: {
+    '/api': {
+      target: 'http://localhost:4000',
+      secure: false
+    }
+  },
+  stats: {
+    // assets: false,
+    colors: true,
+    version: true,
+    hash: false
+    // timings: false,
+    // chunks: false
+    // chunkModules: false
+  }
+}).listen(8001, 'localhost', function (err) {
+  if (err) {
+    console.log(err)
+  }
+  console.log('Listening at localhost:8001')
 })
-
-webserver.listen(devConfig.port, '0.0.0.0', () => {})
-
-console.log('Running on port ' + devConfig.port)
