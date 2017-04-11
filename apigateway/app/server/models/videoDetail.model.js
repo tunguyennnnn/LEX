@@ -10,6 +10,7 @@ const VideoDetailSchema = new mongoose.Schema({
     required: true
   },
   title: String,
+  summary: {type: String, default: ''},
   duration: {
     type: Number,
     default: 0,

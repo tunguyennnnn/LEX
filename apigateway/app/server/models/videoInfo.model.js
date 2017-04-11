@@ -20,6 +20,7 @@ const VideoInfoSchema = new mongoose.Schema({
     time: [{start_time: Number, stop_time: Number}]
   }],
   title: String,
+  summary: {type: String, default: ''},
   duration: {
     type: Number,
     default: 0,
