@@ -10,6 +10,7 @@ const VideoDetailSchema = new mongoose.Schema({
     required: true
   },
   title: String,
+  summary: {type: String, default: ''},
   duration: {
     type: Number,
     default: 0,
@@ -62,7 +63,7 @@ function groupWords (listWords, searchedWords) {
 }
 
 VideoDetailSchema.statics = {
-  search ({videoId, timeStamps, lemWords} = {}) {
+  search ({videoId, timeStamps, lemWords, takeSummary = false} = {}) {
     const timeSet = _.flatten(timeStamps.map((wwt) => wwt.time))
     const filterCondition = {$or: timeSet.map((time) => {
       return {'words_with_time.time.start_time': {$gt: time.start_time - 5.0, $lt: time.stop_time + 5.0}}
@@ -71,13 +72,17 @@ VideoDetailSchema.statics = {
       {$match: {'video_id': videoId}},
       {$unwind: '$words_with_time'},
       {$match: filterCondition},
-      {$group: {_id: {_id: '$_id', thumbnail: '$thumbnail', duration: '$duration', title: '$title', video_id: '$video_id'}, list: {$push: '$words_with_time'}}}
+      {$group: {_id: {_id: '$_id', thumbnail: '$thumbnail', duration: '$duration', title: '$title', video_id: '$video_id', summary: '$summary'}, list: {$push: '$words_with_time'}}}
     ])
     .then((videos) => {
       const video = videos[0]
       const list = groupWords(video.list, lemWords)
-      const {_id, title, thumbnail, duration, video_id} = video._id
-      return {_id, title, thumbnail, duration, video_id, list}
+      const {_id, title, thumbnail, duration, video_id, summary} = video._id
+      if (takeSummary) {
+        return {_id, title, thumbnail, duration, video_id, list, summary}
+      } else {
+        return {_id, title, thumbnail, duration, video_id, list}
+      }
     })
   }
 }

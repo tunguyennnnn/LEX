@@ -39,7 +39,8 @@
     "standard": "^9.0.1",
     "style-loader": "^0.14.1",
     "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.4.2"
+    "webpack-dev-server": "^2.4.2",
+    "react-scrollbar-js": "*"
   },
   "dependencies": {
     "auth0-lock": "^10.13.0",

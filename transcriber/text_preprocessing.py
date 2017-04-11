@@ -6,7 +6,7 @@ import os
 import json
 from contractions import contractions as Cont
 import re
-
+import summary as SM
 
 
 Client = MongoClient("mongodb://lex:sjMl7MdpaX9XdeBU@lex-shard-00-00-fv6o5.mongodb.net:27017,lex-shard-00-01-fv6o5.mongodb.net:27017,lex-shard-00-02-fv6o5.mongodb.net:27017/videostext?ssl=true&replicaSet=lex-shard-0&authSource=admin")
@@ -36,6 +36,7 @@ class TextProcessing:
 		self.full_transcript = full_transcript
 		self.thumbnail_link = thumbnail_link
 		self.duration = int(duration)
+		self.summarizer = SM.FrequencySummarizer()
 
 	def read_f_transcript(self, file_path):
 		with open(file_path) as transcript_file:
@@ -49,8 +50,12 @@ class TextProcessing:
 			self.text_with_time = [twt for twt in data
 											if "word_confidence" in twt["results"][0]["alternatives"][0]]
 			self.reduced_twt = []
+			self.full_transcript = ""
 			for twt in self.text_with_time:
-				self.reduced_twt += self.extract_word_object(twt)
+				word_with_time, transcript = self.extract_word_object(twt)
+				self.reduced_twt += word_with_time
+				if len(transcript.split()) > 2:
+					self.full_transcript += " " + transcript + "."
 
 	def eliminate_contraction(self):
 		'''
@@ -76,11 +81,12 @@ class TextProcessing:
 
 
 	def extract_word_object(self, word_with_time):
-		return [{"word": word_info[0],
+		return ([{"word": word_info[0],
 				 "time": {"start_time": float(word_info[1]),
 						 "stop_time": float(word_info[2])
 						 }
-				} for word_info in word_with_time["results"][0]["alternatives"][0]["timestamps"]]
+				} for word_info in word_with_time["results"][0]["alternatives"][0]["timestamps"]],
+				word_with_time["results"][0]["alternatives"][0]["transcript"].strip().replace('%HESITATION', ""))
 
 	def compress_twt(self):
 		global Pos_tag
@@ -128,14 +134,17 @@ class TextProcessing:
 				self.compressed_twt.append({"word": new_word, "orginal_word": word,"time": time})
 
 	def construct_basic_data(self):
+		summary = " ".join(SM.FrequencySummarizer().summarize(self.full_transcript, int(len(self.full_transcript.split(".")) * 0.1)))
 		return ({"video_id": self.video_id,
 				"title": self.title,
 				"thumbnail": self.thumbnail_link,
 				"duration" : self.duration,
+				"summary" : summary,
 				"words_with_time": self.compressed_twt},
 				{"video_id": self.video_id,
 				"title": self.title,
 				"duration": self.duration,
+				"summary" : summary,
 				"thumbnail": self.thumbnail_link,
 				"words_with_time": self.uncompressed_twt,
 				"raw_transcript": self.full_transcript,
@@ -148,7 +157,6 @@ class TextProcessing:
 		processed_twt, basic_twt = self.construct_basic_data()
 		CompressedTWTCollection.insert(processed_twt)
 		VideoInfoCollection.insert(basic_twt)
-
 
 
 

@@ -20,6 +20,7 @@ const VideoInfoSchema = new mongoose.Schema({
     time: [{start_time: Number, stop_time: Number}]
   }],
   title: String,
+  summary: {type: String, default: ''},
   duration: {
     type: Number,
     default: 0,
@@ -107,7 +108,7 @@ VideoInfoSchema.statics = {
             return Promise.map(_.sortBy(videos, 'score'), (video) => {
               let videoId = video._id
               let timeStamps = video.timeStamps
-              return VideoDetail.search({videoId, timeStamps, lemWords})
+              return VideoDetail.search({videoId, timeStamps, lemWords, takeSummary: true})
             })
           })
         })
