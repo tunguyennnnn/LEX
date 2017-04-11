@@ -108,7 +108,7 @@ VideoInfoSchema.statics = {
             return Promise.map(_.sortBy(videos, 'score'), (video) => {
               let videoId = video._id
               let timeStamps = video.timeStamps
-              return VideoDetail.search({videoId, timeStamps, lemWords})
+              return VideoDetail.search({videoId, timeStamps, lemWords, takeSummary: true})
             })
           })
         })

@@ -2,9 +2,10 @@ import React from 'react'
 
 import { Link } from 'react-router'
 import {formatTime} from '../utils/time'
+import SummaryBox from './SummaryBox'
 export default class VideoListItem extends React.Component {
   render () {
-    const { id, thumbnailUrl, title, duration } = this.props
+    const { id, thumbnailUrl, title, duration, summary } = this.props
 
     // duration = timeFormat
     const thumbStyle = {
@@ -20,6 +21,7 @@ export default class VideoListItem extends React.Component {
             <div class='video-list-item-image-content fade-in'
               style={thumbStyle} />
           </div>
+          <SummaryBox summary={summary} />
           <h3 class='video-list-item-title'>{title}</h3>
           <div class='video-list-item-meta'>
             <div class='video-list-item-duration'>{formatTime(duration, true)}</div>
