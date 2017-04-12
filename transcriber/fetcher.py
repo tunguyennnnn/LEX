@@ -8,7 +8,8 @@ class metadata():
         self.id=v_id
         self.url=url
         self.location=location
-        #TODO: add thumbnail and other info
+
+        self.thumbnail=None
 #end class
 
 def download_video(video):
@@ -35,6 +36,7 @@ def download_video(video):
     video_url = info_dict.get("url", None)
     video_id = info_dict.get("id", None)
     video_title = info_dict.get('title', None)
+
     # Download the video
     downloader.download([video])
     
@@ -46,6 +48,8 @@ def download_video(video):
     os.system("""avconv -i {0}.opus -c:a libopus {0}.ogg -y""".format(file_noext))
     
     retVal=metadata(video_title, video_id, video_url, file_noext+".ogg")
+    retVal.thumbnail = info_dict.get("thumbnails")[0]['url']
+    
     os.remove(file_noext+".opus")
     
     print("""Video with ID {} is done. Pass to transcriber""".format(video_id))

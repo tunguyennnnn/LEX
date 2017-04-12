@@ -4,16 +4,21 @@ from pymongo import MongoClient
 from threading import Timer, Thread
 from multiprocessing import Pool
 from datetime import datetime
+from nltk.stem import WordNetLemmatizer
 
 import time
 import os
 
 import fetcher
 from watson_httpclient import WatsonHTTPWrapper, WatsonResult
+from text_preprocessing import TextProcessing
 
 db_uri = 'mongodb://localhost/test'
+Lemma = WordNetLemmatizer()
 
 def work(item):
+	global Lemma  #Shared object that should only be made once
+	
 	insert_time = item[0]
 	video_url = item[1]
 
@@ -25,12 +30,22 @@ def work(item):
 	result = transcriber.get_result()
 	print("Inserting {} in database".format(metadata.id))
 
-	# TODO: Here we have to merge with the format that Tu is using on his MongoDB collections.
-	db_connection = MongoClient(db_uri)
-	queue_db = db_connection.get_default_database()
-	queue_db.video_data.insert(result.__dict__) # WARNING: This is just for testing
+	# Send it off to be processed and inserted
+	processor = TextProcessing(metadata.id, metadata.name, Lemma)
+	processor.read_f_text_time(result.filename)
+	processor.write_to_db()
+	print("Completed {} and placed in database. Cleaning up.".format(metadata.id))
 	
-	print("Job for {} Complete".format(metadata.id))
+	#Cleanup the garbage!
+	os.remove(metadata.location)
+	os.remove(result.filename)
+	
+	db_connection = MongoClient(db_uri)
+	collection = 'video_queue'
+	queue_db = db_connection.get_default_database()
+	queue_db[collection].delete_many({'video_url':video_url})
+	
+	print("Cleanup done. Job for {} Complete".format(metadata.id))
 	return True
 #end work
 
@@ -54,6 +69,11 @@ class QueueWorker():
 			self.worker_pool.close()
 	#end stop
 	
+	def schedule(self):
+		self.timer = Timer(self.period,QueueWorker.run,args=(self,))
+		self.timer.start()
+	#end schedule
+	
 	def run(self):
 		print("QueueWorker starting at {}".format(datetime.now()))
 		# Load the records from mongo
@@ -66,7 +86,7 @@ class QueueWorker():
 			print("No videos queued")
 			# Schedule self again only if it should continue work
 			if self.continue_work:
-				self.timer = Timer(self.period,QueueWorker.run,args=(self,))
+				self.schedule()
 			return
 		#end if
 		
@@ -83,9 +103,8 @@ class QueueWorker():
 		
 		# Schedule self again only if it should continue work
 		if self.continue_work:
-			self.timer = Timer(self.period,QueueWorker.run,args=(self,))
-			self.timer.start()
-	#end
+			self.schedule()
+	#end run
 #end class
 
 if __name__=="__main__":

@@ -5,11 +5,13 @@ from worker import QueueWorker
 from server import run_server
 
 def main(args=None):
-	worker_obj = QueueWorker(60.0)
+	worker_obj = QueueWorker(10.0)
+	worker_obj.schedule()
 	
-	server_proc = Process(target=run_server)
+	server_proc = proc(target=run_server)
 	server_proc.start()
-	worker_proc = Process(target=QueueWorker.run, args=(worker_obj,))
+	
+	worker_proc = proc(target=QueueWorker.run, args=(worker_obj,))
 	worker_proc.start()
 	
 	# Join with the 

@@ -8,12 +8,9 @@ from contractions import contractions as Cont
 import re
 import summary as SM
 
+#db_uri = "mongodb://lex:sjMl7MdpaX9XdeBU@lex-shard-00-00-fv6o5.mongodb.net:27017,lex-shard-00-01-fv6o5.mongodb.net:27017,lex-shard-00-02-fv6o5.mongodb.net:27017/videostext?ssl=true&replicaSet=lex-shard-0&authSource=admin"
+db_uri = "mongodb://localhost/videostext"
 
-Client = MongoClient("mongodb://lex:sjMl7MdpaX9XdeBU@lex-shard-00-00-fv6o5.mongodb.net:27017,lex-shard-00-01-fv6o5.mongodb.net:27017,lex-shard-00-02-fv6o5.mongodb.net:27017/videostext?ssl=true&replicaSet=lex-shard-0&authSource=admin")
-VideosTextDb = Client.videostext
-CompressedTWTCollection = VideosTextDb.compressedTWT
-VideoInfoCollection = VideosTextDb.text_with_time
-Lemma = WordNetLemmatizer()
 Pos_tag = nltk.pos_tag
 Stop_words = stopwords.words("english")
 
@@ -27,7 +24,7 @@ class TextProcessing:
 			- stopwords
 			- lemmatize words
 	'''
-	def __init__(self, video_id, video_title, duration = 0, thumbnail_link = "", text_with_time = {}, full_transcript = "", db_name = 'videostext', collection='text_with_time'):
+	def __init__(self, video_id, video_title, lemma_obj, duration = 0, thumbnail_link = "", text_with_time = {}, full_transcript = "", db_name = 'videostext', collection='text_with_time'):
 		self.title = video_title
 		self.video_id = video_id
 		self.db_name = db_name
@@ -37,6 +34,7 @@ class TextProcessing:
 		self.thumbnail_link = thumbnail_link
 		self.duration = int(duration)
 		self.summarizer = SM.FrequencySummarizer()
+		self.Lemma = lemma_obj
 
 	def read_f_transcript(self, file_path):
 		with open(file_path) as transcript_file:
@@ -63,7 +61,7 @@ class TextProcessing:
 		'''
 		global Cont
 		global Pos_tag
-		global Lemma
+		
 		self.modified_transcript = ""
 		reg = re.compile("\s+|\.") #splitted by space and dot
 		keys = Cont.keys()
@@ -76,7 +74,7 @@ class TextProcessing:
 					pos_type = "n"
 					if tag == "VBR": #is a verb
 						pos_type ="v"
-					word = Lemma.lemmatize(word, pos=pos_type)
+					word = self.Lemma.lemmatize(word, pos=pos_type)
 				self.modified_transcript += (" " + word)
 
 
@@ -105,7 +103,7 @@ class TextProcessing:
 				pos_type = "n" #default lemmatize to a nounce
 				if tag.find("VB") != -1: #is a verb
 					pos_type ="v"
-				new_word = Lemma.lemmatize(word, pos=pos_type)
+				new_word = self.Lemma.lemmatize(word, pos=pos_type)
 				if not word in Stop_words:
 					compressed_twt.setdefault(new_word,[])
 					compressed_twt[new_word].append(time)
@@ -130,7 +128,7 @@ class TextProcessing:
 				pos_type = "n" #default lemmatize to a nounce
 				if tag.find("VB") != -1: #is a verb
 					pos_type ="v"
-				new_word = Lemma.lemmatize(word, pos=pos_type)
+				new_word = self.Lemma.lemmatize(word, pos=pos_type)
 				self.compressed_twt.append({"word": new_word, "orginal_word": word,"time": time})
 
 	def construct_basic_data(self):
@@ -151,16 +149,19 @@ class TextProcessing:
 				"processed_transcript": self.modified_transcript})
 
 	def write_to_db(self):
-		global VideosTextDb
+		Client = MongoClient(db_uri)
+		VideosTextDb = Client.videostext
+		CompressedTWTCollection = VideosTextDb.compressedTWT
+		VideoInfoCollection = VideosTextDb.text_with_time
 		self.eliminate_contraction()
 		self.compress_twt()
 		processed_twt, basic_twt = self.construct_basic_data()
 		CompressedTWTCollection.insert(processed_twt)
 		VideoInfoCollection.insert(basic_twt)
+#end class TextProcessing
 
-
-
-# x = TextProcessing("dQw4w9WgXcQ", 'lecture')
-# x.read_f_transcript('./output/hypotheses.txt')
-# x.read_f_text_time('./output/0.json.txt')
-# x.write_to_db()
+if __name__=="__main__":
+	Lemma = WordNetLemmatizer()
+	x = TextProcessing("dQw4w9WgXcQ", 'lecture', Lemma)
+	x.read_f_text_time('./output/0.json.txt')
+	x.write_to_db()
