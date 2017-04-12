@@ -8,6 +8,7 @@ app = Flask("Transcriber")
 
 db_uri = 'mongodb://localhost/test'
 db_connection = MongoClient(db_uri)
+collection = 'video_queue'
 
 @app.route('/videos', methods=['POST','PUT'])
 def put_video():
@@ -32,7 +33,7 @@ def put_video():
 	for a_video in video_list:
 		formatted = {'video_url': a_video}
 		formatted['insert_time'] = str(time.time())
-		queue_db.test.insert(formatted)
+		queue_db[collection].insert(formatted)
 		retVal.append(str(formatted))
 	#end for
 	
@@ -47,7 +48,7 @@ def get_video():
 	Returns a JSON object with the full list of URLs waiting to be processed
 	"""
 	queue_db = db_connection.get_default_database()
-	elements = queue_db.test.find()
+	elements = queue_db[collection].find()
 
 	retVal = [x['video_url'] for x in elements]
 	

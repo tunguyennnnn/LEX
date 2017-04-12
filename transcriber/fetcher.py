@@ -3,11 +3,12 @@ import sys
 from youtube_dl import YoutubeDL
 
 class metadata():
-    def __init__(self, name, id, url, location):
+    def __init__(self, name, v_id, url, location):
         self.name = name
-        self.id=id
+        self.id=v_id
         self.url=url
         self.location=location
+        #TODO: add thumbnail and other info
 #end class
 
 def download_video(video):
@@ -40,10 +41,14 @@ def download_video(video):
     # by now, there should be a 'video_id.opus' file, transcode to ogg
     assert(video_id+".opus" in os.listdir('recordings'))
     print("Transcoding {0}.opus to {0}.ogg".format(video_id))
-    os.system("""avconv -i {0}.opus -c:a libopus {0}.ogg""".format(os.path.join(os.getcwd(),'recordings',video_id)))
+    
+    file_noext = os.path.join(os.getcwd(),'recordings',video_id)
+    os.system("""avconv -i {0}.opus -c:a libopus {0}.ogg -y""".format(file_noext))
+    
+    retVal=metadata(video_title, video_id, video_url, file_noext+".ogg")
+    os.remove(file_noext+".opus")
     
     print("""Video with ID {} is done. Pass to transcriber""".format(video_id))
-    retVal=metadata(video_title, video_id, video_url, os.path.join(os.getcwd(),'recordings','{}.opus'.format(video_id)))
     return retVal
 # end download_videos
 

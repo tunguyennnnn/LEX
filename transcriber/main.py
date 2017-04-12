@@ -14,6 +14,7 @@ def main(args=None):
 	
 	# Join with the 
 	server_proc.join()
+	worker_obj.stop()
 #end main
 
 if __name__=="__main__":
