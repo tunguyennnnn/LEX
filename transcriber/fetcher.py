@@ -18,7 +18,7 @@ def download_video(video):
     # end test_hook
 
     options = {
-		'verbose': True,
+	#'verbose': True,
         'format': 'bestaudio/best',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
