@@ -1,4 +1,4 @@
-# This replaces the streaming websoket interface
+# This replaces the streaming websocket interface
 
 import os
 import time
