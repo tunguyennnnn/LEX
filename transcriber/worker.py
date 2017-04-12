@@ -4,6 +4,9 @@ from pymongo import MongoClient
 from Threading import Timer
 from multiprocessing import Pool
 
+db_uri = 'mongodb://localhost/test'
+db_connection = MongoClient(db_uri)
+
 class QueueWorker():
 	def __init__(self, poll_period, worker_pool=10):
 		self.continue_work = True

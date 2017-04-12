@@ -2,10 +2,12 @@
 
 from flask import Flask, jsonify, request, abort
 from pymongo import MongoClient
+import time
 
 app = Flask("Transcriber")
 
-fake_list = []
+db_uri = 'mongodb://localhost/test'
+db_connection = MongoClient(db_uri)
 
 @app.route('/videos', methods=['POST','PUT'])
 def put_video():
@@ -14,15 +16,27 @@ def put_video():
 	Use this by calling 'POST /videos'
 	with a JSON object that has a 'video_url' key pointing to a list of URLs
 	"""
-	global fake_list # TODO: replace with actual mongodb connection
+	global db_connection
+	
 	if not request.json or not 'video_url' in request.json:
 		abort(400)
 	
 	video_list = request.json['video_url']
+	if len(video_list) < 1:
+		abort(400)
+		
 	print("Received {}".format(video_list))
-	fake_list.extend(video_list)
+	queue_db = db_connection.get_default_database()
+
+	retVal = []
+	for a_video in video_list:
+		formatted = {'video_url': a_video}
+		formatted['insert_time'] = str(time.time())
+		queue_db.test.insert(formatted)
+		retVal.append(str(formatted))
+	#end for
 	
-	return jsonify({'new_videos':video_list}), 200
+	return jsonify({'new_videos':retVal}), 200
 #end put_video
 	
 @app.route('/videos', methods=['GET'])
@@ -32,8 +46,12 @@ def get_video():
 	Use this by calling 'GET /videos'
 	Returns a JSON object with the full list of URLs waiting to be processed
 	"""
-	global fake_list # TODO: replace with actual mongodb connection
-	return jsonify({'queued_videos':fake_list}), 200
+	queue_db = db_connection.get_default_database()
+	elements = queue_db.test.find()
+
+	retVal = [x['video_url'] for x in elements]
+	
+	return jsonify({'queued_videos':retVal}), 200
 #end get_video
 
 def run_server(args=None):
