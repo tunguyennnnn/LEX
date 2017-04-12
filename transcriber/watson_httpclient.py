@@ -38,7 +38,7 @@ class WatsonHTTPWrapper():
 		start_time = time.time()
 	
 		self.data = open(os.path.join(self.data_dir,self.video_id+".ogg"),'rb').read()
-		request_params = ( ('continuous','true'), ('timestamps', str(self.use_time).lower()) )
+		request_params = ( ('continuous','true'), ('timestamps', str(self.use_time).lower()), ('word_confidence','true') )
 		request_header = {'Content-Type':'audio/ogg;codecs=opus'}
 		
 		self.result_reply = requests.post(WatsonHTTPWrapper.endpoint_url, params=request_params, data=self.data, headers=request_header, auth=(self.user,self.password), timeout=100000)

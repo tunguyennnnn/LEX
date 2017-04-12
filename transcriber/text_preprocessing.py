@@ -45,8 +45,7 @@ class TextProcessing:
 		with open(file_path) as text_time_file:
 			data = '[' + text_time_file.read() + ']'
 			data = json.loads(data.replace('}{', '},{'))
-			self.text_with_time = [twt for twt in data
-											if "word_confidence" in twt["results"][0]["alternatives"][0]]
+			self.text_with_time = [twt for twt in data if "word_confidence" in twt["results"][0]["alternatives"][0]]
 			self.reduced_twt = []
 			self.full_transcript = ""
 			for twt in self.text_with_time:
@@ -163,5 +162,5 @@ class TextProcessing:
 if __name__=="__main__":
 	Lemma = WordNetLemmatizer()
 	x = TextProcessing("dQw4w9WgXcQ", 'lecture', Lemma)
-	x.read_f_text_time('./output/0.json.txt')
+	x.read_f_text_time('./output/pvjPzsLIyGw.txt')
 	x.write_to_db()
