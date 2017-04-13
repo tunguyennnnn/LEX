@@ -17,7 +17,7 @@ export default class Account extends React.Component {
 
   render () {
     return (
-      <div>
+      <div style={{marginTop: 3.0 + 'em'}}>
         <h4>Add a new Video</h4>
         <VideoQueueUpForm onSubmit={this.handleSubmit} />
       </div>

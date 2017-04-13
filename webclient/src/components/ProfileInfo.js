@@ -6,15 +6,12 @@ export default class ProfileInfo extends React.Component {
     const { profile, logout } = this.props
 
     return (
-      <div>
-        <h3>My Account</h3>
+      <div class='profile-info'>
         <div>
-          <span>Username:</span> {profile.nickname}
+          <h1 style={{marginTop: 0}}>Profile</h1>
+          <span style={{fontSize: 1.4 + 'em'}}>Welcome back {profile.nickname}</span>
         </div>
-        <div>
-          <span>Profile Picture:</span> <img src={profile.picture} height='60px' />
-        </div>
-        <div>
+        <div class='profile-info-right'>
           <RaisedButton onTouchTap={logout} label='Logout' type='button' primary />
         </div>
       </div>

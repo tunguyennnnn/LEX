@@ -54,3 +54,19 @@
 .login-button:hover {
     background-color: rgba(0, 188, 212, 0.7);
 }
+
+.profile-info {
+    font-family: Roboto, sans-serif;
+    display:flex;
+    justify-content: space-between;
+}
+
+.profile-info-right {
+    justify-content:flex-end;
+}
+
+.clearfix:after {
+  clear: both;
+  content: ' ';
+  display: table;
+}

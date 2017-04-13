@@ -29,10 +29,7 @@ export default class Account extends React.Component {
     return (
       <div>
         <ProfileInfo profile={profile} logout={logout} />
-        <h4>History</h4>
-        <div>
-          hello world
-        </div>
+        <div class='clearfix' />
         <QueueVideo queueVideos={this.handleQueueVideos} />
       </div>
     )
