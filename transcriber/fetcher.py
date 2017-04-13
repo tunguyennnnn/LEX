@@ -3,13 +3,14 @@ import sys
 from youtube_dl import YoutubeDL
 
 class metadata():
-    def __init__(self, name, v_id, url, location):
+    def __init__(self, name, v_id, url, location, duration):
         self.name = name
         self.id=v_id
         self.url=url
         self.location=location
 
         self.thumbnail=None
+        self.duration = duration
 #end class
 
 def download_video(video):
@@ -36,6 +37,7 @@ def download_video(video):
     video_url = info_dict.get("url", None)
     video_id = info_dict.get("id", None)
     video_title = info_dict.get('title', None)
+    video_duration = info_dict.get('duration',None)
 
     # Download the video
     downloader.download([video])
@@ -47,7 +49,7 @@ def download_video(video):
     file_noext = os.path.join(os.getcwd(),'recordings',video_id)
     os.system("""avconv -i {0}.opus -c:a libopus {0}.ogg -y""".format(file_noext))
     
-    retVal=metadata(video_title, video_id, video_url, file_noext+".ogg")
+    retVal=metadata(video_title, video_id, video_url, file_noext+".ogg", video_duration)
     retVal.thumbnail = info_dict.get("thumbnails")[0]['url']
     
     os.remove(file_noext+".opus")

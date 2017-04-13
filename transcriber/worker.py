@@ -13,9 +13,8 @@ import traceback
 import fetcher
 from watson_httpclient import WatsonHTTPWrapper, WatsonResult
 from text_preprocessing import TextProcessing
+from config.settings import DB_URI
 
-db_uri = "mongodb://lex:sjMl7MdpaX9XdeBU@lex-shard-00-00-fv6o5.mongodb.net:27017,lex-shard-00-01-fv6o5.mongodb.net:27017,lex-shard-00-02-fv6o5.mongodb.net:27017/videostext?ssl=true&replicaSet=lex-shard-0&authSource=admin"
-#db_uri = 'mongodb://localhost/test'
 Lemma = WordNetLemmatizer()
 
 def work(item):
@@ -34,7 +33,7 @@ def work(item):
 	print("Inserting {} in database".format(metadata.id))
 
 	# Send it off to be processed and inserted
-	processor = TextProcessing(metadata.id, metadata.name, Lemma)
+	processor = TextProcessing(metadata.id, metadata.name, Lemma, metadata.duration, metadata.thumbnail)
 	print(result.filename)
 	processor.read_f_text_time(result.filename)
 	processor.write_to_db()
@@ -44,7 +43,7 @@ def work(item):
 	os.remove(metadata.location)
 	os.remove(result.filename)
 	
-	db_connection = MongoClient(db_uri)
+	db_connection = MongoClient(DB_URI)
 	collection = 'video_queue'
 	queue_db = db_connection.get_default_database()
 	queue_db[collection].delete_many({'video_url':video_url})
@@ -94,7 +93,7 @@ class QueueWorker():
 		while self.continue_work:
 			print("QueueWorker starting at {}".format(datetime.now()))
 			# Load the records from mongo
-			db_connection = MongoClient(db_uri)
+			db_connection = MongoClient(DB_URI)
 			collection = 'video_queue'
 			queue_db = db_connection.get_default_database()
 			video_list = list(queue_db[collection].find())
