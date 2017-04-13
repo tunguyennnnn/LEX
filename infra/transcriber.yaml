@@ -16,7 +16,7 @@ kind: Deployment
 metadata:
   name: transriber
 spec:
-  replicas: 5 # number of instances
+  replicas: 1 # number of instances
   template:
     metadata:
       labels:
@@ -26,10 +26,10 @@ spec:
     spec:
       containers:
       - name: transriber
-        image: gcr.io/<OUR-PROJECT-ID>/app
+        image: "gcr.io/lexv-159619/transriber:v0.0.1"
         env:
         - name: PORT
-          value: ""
+          value: "4000"
         ports:
         - name: http
           containerPort: 4000
