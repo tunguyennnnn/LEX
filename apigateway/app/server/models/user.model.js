@@ -9,7 +9,7 @@ const UserSchemma = new mongoose.Schema({
     type: String,
     required: true
   },
-  email: {type: String, default: ''},
+  //email: {type: String, default: ''},
   history: {
     type: [{
       videoId: mongoose.Schema.Types.ObjectId,

@@ -12,11 +12,10 @@ function userProfile (req, res, next) {
     User.findOne({userId: sub})
       .then((user) => {
         if (user) {
-          res.status(200).json(user)
+          res.status(200).send()
         } else {
           const newUser = new User({
-            userId: sub,
-            email: email
+            userId: sub
           })
           return newUser.save()
             .then((user) => {
