@@ -14,7 +14,8 @@ import fetcher
 from watson_httpclient import WatsonHTTPWrapper, WatsonResult
 from text_preprocessing import TextProcessing
 
-db_uri = 'mongodb://localhost/test'
+db_uri = "mongodb://lex:sjMl7MdpaX9XdeBU@lex-shard-00-00-fv6o5.mongodb.net:27017,lex-shard-00-01-fv6o5.mongodb.net:27017,lex-shard-00-02-fv6o5.mongodb.net:27017/videostext?ssl=true&replicaSet=lex-shard-0&authSource=admin"
+#db_uri = 'mongodb://localhost/test'
 Lemma = WordNetLemmatizer()
 
 def work(item):
@@ -124,7 +125,7 @@ class QueueWorker():
 #end class
 
 if __name__=="__main__":
-	worker = QueueWorker(30.0)
+	worker = QueueWorker(600.0)
 	print("STARTING WORKERS")
 	worker.run()
 

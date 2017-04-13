@@ -17,4 +17,4 @@ COPY . /usr/src/app
 
 # Run the Python command
 #TODO: Change to http server entry point when available
-CMD [ "python3", "fetcher.py", "https://www.youtube.com/watch?v=dQw4w9WgXcQ" ]
+CMD [ "./run.sh" ]
