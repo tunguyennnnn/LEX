@@ -33,7 +33,7 @@ def work(item):
 	print("Inserting {} in database".format(metadata.id))
 
 	# Send it off to be processed and inserted
-	processor = TextProcessing(metadata.id, metadata.name, Lemma)
+	processor = TextProcessing(metadata.id, metadata.name, Lemma, metadata.duration, metadata.thumbnail)
 	print(result.filename)
 	processor.read_f_text_time(result.filename)
 	processor.write_to_db()

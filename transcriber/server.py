@@ -57,7 +57,7 @@ def get_video():
 #end get_video
 
 def run_server(args=None):
-	app.run(debug=True,host='0.0.0.0',port='5000')
+	app.run(debug=True,host='0.0.0.0',port=5000)
 #end main
 
 if __name__ == '__main__':
