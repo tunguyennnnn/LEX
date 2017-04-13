@@ -21,5 +21,5 @@ RUN sh nltk_download_packages.sh
 # Copy all relevant files (not under Dockerignore)
 COPY . /usr/src/app
 
-# Run the bash script to create the two python processes
-CMD [ "sh","run.sh" ]
+# Run the Python command
+CMD [ "sh", "/usr/src/app/run.sh" ]

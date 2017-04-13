@@ -59,7 +59,7 @@ function groupWords (listWords, searchedWords) {
     }
   })
   groupedWords.push(currentObject)
-  return groupedWords
+  return _.filter(groupedWords, function(word) { return word.words.length != 0 });
 }
 
 VideoDetailSchema.statics = {
