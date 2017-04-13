@@ -2,14 +2,14 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from pymongo import MongoClient
+from contractions import contractions as Cont
+from constants import db_uri
+
 import os
 import json
-from contractions import contractions as Cont
 import re
 import summary as SM
 
-db_uri = "mongodb://lex:sjMl7MdpaX9XdeBU@lex-shard-00-00-fv6o5.mongodb.net:27017,lex-shard-00-01-fv6o5.mongodb.net:27017,lex-shard-00-02-fv6o5.mongodb.net:27017/videostext?ssl=true&replicaSet=lex-shard-0&authSource=admin"
-#db_uri = "mongodb://localhost/videostext"
 
 Pos_tag = nltk.pos_tag
 Stop_words = stopwords.words("english")

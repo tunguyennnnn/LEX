@@ -2,12 +2,12 @@
 
 from flask import Flask, jsonify, request, abort
 from pymongo import MongoClient
+from constants import db_uri
+
 import time
 
 app = Flask("Transcriber")
 
-db_uri = "mongodb://lex:sjMl7MdpaX9XdeBU@lex-shard-00-00-fv6o5.mongodb.net:27017,lex-shard-00-01-fv6o5.mongodb.net:27017,lex-shard-00-02-fv6o5.mongodb.net:27017/videostext?ssl=true&replicaSet=lex-shard-0&authSource=admin"
-#db_uri = 'mongodb://localhost/test'
 db_connection = MongoClient(db_uri)
 collection = 'video_queue'
 
@@ -57,7 +57,7 @@ def get_video():
 #end get_video
 
 def run_server(args=None):
-	app.run(debug=True)
+	app.run(debug=True,host='0.0.0.0',port='5000')
 #end main
 
 if __name__ == '__main__':
