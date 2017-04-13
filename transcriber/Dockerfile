@@ -17,4 +17,4 @@ COPY . /usr/src/app
 
 # Run the Python command
 #TODO: Change to http server entry point when available
-CMD [ "./run.sh" ]
+CMD [ "sh", "/usr/src/app/run.sh" ]
