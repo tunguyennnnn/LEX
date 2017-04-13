@@ -13,7 +13,7 @@ import traceback
 import fetcher
 from watson_httpclient import WatsonHTTPWrapper, WatsonResult
 from text_preprocessing import TextProcessing
-from constants import db_uri
+from config.settings import DB_URI
 
 Lemma = WordNetLemmatizer()
 
@@ -43,7 +43,7 @@ def work(item):
 	os.remove(metadata.location)
 	os.remove(result.filename)
 	
-	db_connection = MongoClient(db_uri)
+	db_connection = MongoClient(DB_URI)
 	collection = 'video_queue'
 	queue_db = db_connection.get_default_database()
 	queue_db[collection].delete_many({'video_url':video_url})
@@ -93,7 +93,7 @@ class QueueWorker():
 		while self.continue_work:
 			print("QueueWorker starting at {}".format(datetime.now()))
 			# Load the records from mongo
-			db_connection = MongoClient(db_uri)
+			db_connection = MongoClient(DB_URI)
 			collection = 'video_queue'
 			queue_db = db_connection.get_default_database()
 			video_list = list(queue_db[collection].find())

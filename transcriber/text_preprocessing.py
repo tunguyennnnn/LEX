@@ -3,9 +3,8 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from pymongo import MongoClient
 from contractions import contractions as Cont
-from constants import db_uri
+from config.settings import DB_URI
 
-import os
 import json
 import re
 import summary as SM
@@ -148,7 +147,7 @@ class TextProcessing:
 				"processed_transcript": self.modified_transcript})
 
 	def write_to_db(self):
-		Client = MongoClient(db_uri)
+		Client = MongoClient(DB_URI)
 		VideosTextDb = Client.videostext
 		CompressedTWTCollection = VideosTextDb.compressedTWT
 		VideoInfoCollection = VideosTextDb.text_with_time

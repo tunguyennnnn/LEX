@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: transriber
+  name: transcriber
 spec:
   selector:
     name: transriber
@@ -14,22 +14,22 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: transriber
+  name: transcriber
 spec:
   replicas: 1 # number of instances
   template:
     metadata:
       labels:
-        name: transriber
+        name: transcriber
         tier: backend
         type: deployment
     spec:
       containers:
-      - name: transriber
-        image: "gcr.io/lexv-159619/transcriber:v0.0.2"
+      - name: transcriber
+        image: "gcr.io/lexv-159619/transcriber:v0.0.5"
         env:
-        - name: PORT
-          value: "5000"
+        - name: ENVIRONMENT
+          value: "production"
         ports:
         - name: http
           containerPort: 5000

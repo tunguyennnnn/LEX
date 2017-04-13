@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: "gcr.io/lexv-159619/webclient:v0.0.6"
+          image: "gcr.io/lexv-159619/webclient:v0.0.7"
           lifecycle:
             preStop:
               exec:
