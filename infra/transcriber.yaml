@@ -1,6 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
+  labels:
+    name: transcriber
   name: transcriber
 spec:
   selector:
@@ -8,7 +10,7 @@ spec:
     tier: backend
   ports:
     - port: 80
-      targetPort: http
+      targetPort: transcriberhttp
       protocol: TCP
 ---
 apiVersion: extensions/v1beta1
@@ -26,10 +28,10 @@ spec:
     spec:
       containers:
       - name: transcriber
-        image: "gcr.io/lexv-159619/transcriber:v0.0.5"
+        image: "gcr.io/lexv-159619/transcriber:v0.0.6"
         env:
         - name: ENVIRONMENT
           value: "production"
         ports:
-        - name: http
+        - name: transcriberhttp
           containerPort: 5000

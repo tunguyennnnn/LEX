@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kube-client
+spec:
+  replicas: 1 # number of instances
+  template:
+    metadata:
+      labels:
+        name: kube-client
+        tier: infra
+        type: deployment
+    spec:
+      containers:
+      - name: kube-client
+        image: "gcr.io/lexv-159619/kube-client:v0.1.0"

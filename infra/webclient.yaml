@@ -11,10 +11,12 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
+  labels:
+    name: webclient
   name: webclient
 spec:
   selector:
-    app: webclient
+    name: webclient
     tier: frontend
   ports:
     - protocol: "TCP"
@@ -31,13 +33,13 @@ spec:
   template:
     metadata:
       labels:
-        app: webclient
+        name: webclient
         tier: frontend
         type: deployment
     spec:
       containers:
         - name: nginx
-          image: "gcr.io/lexv-159619/webclient:v0.0.7"
+          image: "gcr.io/lexv-159619/webclient:v0.1.1"
           lifecycle:
             preStop:
               exec:
