@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .JobName }}
+spec:
+  template:
+    metadata:
+      name: {{ .JobName }}
+    spec:
+      containers:
+      - name: job-worker
+        image: "gcr.io/lexv-159619/testjob:v0.0.1"
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: JOB_ID
+          value: {{ .JobId }}
+      restartPolicy: Never
