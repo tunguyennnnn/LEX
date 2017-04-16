@@ -1,0 +1,16 @@
+{
+    "dependencies": {
+        "github.com/braintree/manners": {
+            "branch": "master"
+        },
+        "github.com/garyburd/redigo": {
+            "branch": "master"
+        },
+        "github.com/gocraft/web": {
+            "branch": "master"
+        },
+        "github.com/gocraft/work": {
+            "branch": "master"
+        }
+    }
+}
