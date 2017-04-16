@@ -1,21 +1,26 @@
 const express = require('express')
+const proxy = require('http-proxy-middleware')
+
 const videoCtrl = require('../controllers/video.controller')
-const queueCtrl = require('../controllers/queue.controller')
-const router = express.Router()
+// const queueCtrl = require('../controllers/queue.controller')
 const authCheck = require('../../config/auth')
+const config = require('../../config/env')
 
-router.route('/')
-  /** GET /api/videos - Get list of videos */
+// const logger = require('../../config/winston')
+
+const openRouter = express.Router()
+
+openRouter.route('/')
   .get(videoCtrl.list)
-  .post(authCheck, videoCtrl.postVideo)
 
-router.route('/:video_id')
-  .all(authCheck)
+const authRouter = express.Router()
+
+authRouter.all('*', authCheck)
+
+authRouter.route('/')
+  .post(videoCtrl.postVideo)
+
+authRouter.route('/:video_id')
   .get(videoCtrl.videoSearch)
 
-router.route('/queue')
-  .all(authCheck)
-  .get(queueCtrl.progress)
-  .post(queueCtrl.transcribeVideo)
-
-module.exports = router
+module.exports = {openRouter, authRouter}

@@ -8,7 +8,7 @@ const devConfig = {
   db: process.env.REMOTE_MONGO || 'mongodb://localhost/videostext',
   secret: 'tusamjavier',
   port: process.env.PORT || 4000,
-  transcriberBaseUrl: 'http://localhost:5000'
+  queueClientBaseUrl: 'http://localhost:8005'
 }
 
 module.exports = devConfig

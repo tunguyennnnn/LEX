@@ -3,7 +3,7 @@ const prodConfig = {
   env: 'production',
   db: process.env.DB || 'mongodb://mongo/videostext',
   port: process.env.PORT || 4000,
-  transcriberBaseUrl: 'http://transcriber'
+  queueClientBaseUrl: 'http://queueclient'
 }
 
 module.exports = prodConfig

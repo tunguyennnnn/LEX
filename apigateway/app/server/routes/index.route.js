@@ -1,6 +1,7 @@
 const express = require('express')
 const videoRoutes = require('./video.route')
-const userRoute = require('./user.route')
+const userRoutes = require('./user.route')
+const queueRoutes = require('./queue.route')
 
 const router = express.Router()
 
@@ -11,8 +12,11 @@ router.post('/health-check', (req, res) => {
 })
 
 // videos info routes
-router.use('/videos', videoRoutes)
+router.use('/videos', videoRoutes.openRouter)
+router.use('/videos', videoRoutes.authRouter)
 
-router.use('/users', userRoute)
+router.use('/queue', queueRoutes)
+
+router.use('/users', userRoutes)
 
 module.exports = router

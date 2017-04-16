@@ -1,5 +1,4 @@
 const VideoInfo = require('../models/videoInfo.model')
-const mongoose = require('mongoose')
 
 const logger = require('../../config/winston')
 /**
