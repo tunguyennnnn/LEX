@@ -3,6 +3,7 @@
 import os
 import time
 import requests
+import sys
 
 class WatsonResult():
 	def __init__(self, video_id, watson_data, result_file):
@@ -67,6 +68,7 @@ class WatsonHTTPWrapper():
 
 if __name__=="__main__":
 	# Just for testing purposes
-	test_req = WatsonHTTPWrapper('MD_xiokVXwI')
+	process_id = sys.argv[1]
+	test_req = WatsonHTTPWrapper(process_id)
 	test_req.set_credentials(os.getenv("USER"),os.getenv("PASS"))
 	test_req.do_request()

@@ -8,6 +8,7 @@ from config.settings import DB_URI
 import json
 import re
 import summary as SM
+import sys
 
 
 Pos_tag = nltk.pos_tag
@@ -160,6 +161,7 @@ class TextProcessing:
 
 if __name__=="__main__":
 	Lemma = WordNetLemmatizer()
-	x = TextProcessing("dQw4w9WgXcQ", 'lecture', Lemma)
-	x.read_f_text_time('./output/pvjPzsLIyGw.txt')
+	process_id = sys.argv[1]
+	x = TextProcessing(process_id, 'lecture', Lemma)
+	x.read_f_text_time('./output/'+ process_id + '.txt')
 	x.write_to_db()
