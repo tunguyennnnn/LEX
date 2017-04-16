@@ -2,7 +2,7 @@ import React from 'react'
 
 import VideoQueueUpForm from '../components/VideoQueueUpForm'
 
-export default class Account extends React.Component {
+export default class QueueVideo extends React.Component {
   constructor (props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -10,7 +10,7 @@ export default class Account extends React.Component {
 
   handleSubmit (values) {
     const query = {
-      video_url: [values.youtubeurl]
+      video_id: values.youtubeurl
     }
     this.props.queueVideos({query: query})
   }

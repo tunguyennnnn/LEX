@@ -10,7 +10,8 @@ export default class SummaryBox extends React.Component {
     return(
       <ReactScrollbar style={myScrollbar}>
         <div class='summary-block'>
-          <p>{ summary }</p>
+          <h5 class='summary-title'>Summary</h5>
+          <p class='summary-body'>{ summary }</p>
         </div>
       </ReactScrollbar>
     )

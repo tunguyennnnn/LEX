@@ -25,7 +25,7 @@ export default class SearchVideo extends React.Component {
     console.log(this.props)
     const { videoSearch } = this.props
 
-    const listName = 'Recents'
+    const listName = 'Resutls'
 
     return (
       <div>

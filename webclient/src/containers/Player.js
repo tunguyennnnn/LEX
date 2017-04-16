@@ -5,9 +5,11 @@ import { searchMarkers, clearMarkersResults } from '../actions/markerSearch'
 
 import SearchMarker from './SearchMarker'
 import VideoPlayer from '../components/VideoPlayer'
+import SummaryText from '../components/SummaryText'
 
 @connect((store) => ({
-  markerSearch: store.markerSearch
+  markerSearch: store.markerSearch,
+  videoSearch: store.videoSearch
 }),
   { searchMarkers, clearMarkersResults }
 )
@@ -41,21 +43,39 @@ export default class Player extends React.Component {
 
   render () {
     console.log(this.props)
-    const { markerSearch, params } = this.props
+    const { markerSearch, videoSearch, params } = this.props
     const { videoId } = params
+
+    const summary = videoSearch.videos
+      .filter((v) => v.video_id === videoId)[0].summary
 
     return (
       <div id='videoContainer' class='main-player'>
-        <VideoPlayer
-          src={videoId}
-          onReady={this.handlePlayerReady}
-        />
-        <SearchMarker
-          markerSearch={markerSearch}
-          seekTo={this.handleSeekTo}
-          search={this.handleMarkerSearch}
-          clearMarkers={this.handleMarkerClear}
-         />
+        <div class='row'>
+          <div class='column column-50'>
+            <div class='row'>
+              <div class='column'>
+                <VideoPlayer
+                  src={videoId}
+                  onReady={this.handlePlayerReady}
+                />
+              </div>
+            </div>
+            <div class='row'>
+              <div class='column'>
+                <SummaryText summary={summary} />
+              </div>
+            </div>
+          </div>
+          <div class='column column-40'>
+            <SearchMarker
+              markerSearch={markerSearch}
+              seekTo={this.handleSeekTo}
+              search={this.handleMarkerSearch}
+              clearMarkers={this.handleMarkerClear}
+             />
+          </div>
+        </div>
       </div>
     )
   }
