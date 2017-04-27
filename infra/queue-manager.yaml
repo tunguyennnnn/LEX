@@ -1,16 +1,16 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: kube-client
+  name: queue-manager
 spec:
   replicas: 1 # number of instances
   template:
     metadata:
       labels:
-        name: kube-client
+        name: queue-manager
         tier: infra
         type: deployment
     spec:
       containers:
-      - name: kube-client
-        image: "gcr.io/lexv-159619/kube-client:v0.1.0"
+      - name: queue-manager
+        image: "gcr.io/lexv-159619/queue-manager:v0.1.0"
